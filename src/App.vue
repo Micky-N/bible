@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-
 console.log(
     '[App.vue]',
     `Hello world from Electron ${process.versions.electron}!`
@@ -9,6 +7,14 @@ console.log(
 
 <template>
     <div>
+        <div class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <router-link to="/" class="nav-link">home</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/about" class="nav-link">about</router-link>
+            </li>
+        </div>
         <a href="https://www.electronjs.org/" target="_blank">
             <img
                 src="./assets/electron.svg"
@@ -17,13 +23,13 @@ console.log(
             />
         </a>
         <a href="https://vitejs.dev/" target="_blank">
-            <img src="/vite.svg" class="logo" alt="Vite logo" />
+            <img src="./assets/vite.svg" class="logo" alt="Vite logo" />
         </a>
         <a href="https://vuejs.org/" target="_blank">
             <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
         </a>
     </div>
-    <HelloWorld msg="Electron + Vite + Vue" />
+    <router-view />
     <div class="flex-center">
         Place static files into the <code>/public</code> folder
         <img style="width: 5em" src="/node.svg" alt="Node logo" />

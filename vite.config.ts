@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'url'
 import { rmSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -14,6 +15,11 @@ export default defineConfig(({ command }) => {
     const sourcemap = isServe || !!process.env.VSCODE_DEBUG
 
     return {
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url)),
+            },
+        },
         plugins: [
             vue(),
             electron([
