@@ -2,8 +2,6 @@
     <div>test</div>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
-<style>
-</style>
+<style></style>

@@ -22,12 +22,20 @@ export default class Bible {
         return require(bible);
     }
 
-    getBook({testament, book}: {testament: number, book: number}) {
-        return this.getBible().testaments[testament].books[book]
+    getBook({ testament, book }: { testament: number; book: number }) {
+        return this.getBible().testaments[testament].books[book];
     }
 
-    getVerses({testament, book, verses}: {testament: number, book: number, verses: number|string}) {
-        return this.getBible().testaments[testament].books[book]
+    getVerses({
+        testament,
+        book,
+        verses,
+    }: {
+        testament: number;
+        book: number;
+        verses: number | string;
+    }) {
+        return this.getBible().testaments[testament].books[book];
     }
 
     getVersion(): string {

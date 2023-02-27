@@ -7,13 +7,13 @@ console.log(
     `Hello world from Electron ${process.versions.electron}!`
 );
 
-let bible = ref({})
+let bible = ref({});
 
-const ipcRenderer: IpcRenderer = inject('ipcRenderer') as IpcRenderer
+const ipcRenderer: IpcRenderer = inject('ipcRenderer') as IpcRenderer;
 ipcRenderer.on('bible', (event, arg) => {
-    bible = arg
-})
-console.log()
+    bible = arg;
+});
+console.log();
 </script>
 
 <template>

@@ -7,9 +7,11 @@ interface IBible {
                     value: string;
                     chapters: [
                         {
-                            verses: [{
-                                value: string
-                            }];
+                            verses: [
+                                {
+                                    value: string;
+                                }
+                            ];
                         }
                     ];
                 }

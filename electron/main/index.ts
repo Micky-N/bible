@@ -113,17 +113,16 @@ ipcMain.handle('open-win', (_, arg) => {
     }
 });
 
-
 ipcMain.on('bible', (event) => {
-    event.returnValue = new Bible().getBible()
+    event.returnValue = new Bible().getBible();
 });
 
 ipcMain.on('book', (event, params) => {
-    event.returnValue = new Bible().getBook(params)
+    event.returnValue = new Bible().getBook(params);
 });
 
 ipcMain.on('verses', (event, params) => {
-    event.returnValue = new Bible().getVerses(params)
+    event.returnValue = new Bible().getVerses(params);
 });
 
 ipcMain.on('home', (event) => {
@@ -131,5 +130,5 @@ ipcMain.on('home', (event) => {
 });
 
 ipcMain.on('about', (event) => {
-    event.sender.loadURL(url+'about');
+    event.sender.loadURL(url + 'about');
 });

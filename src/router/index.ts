@@ -5,7 +5,6 @@ import BibleBook from '../views/Bible/Book.vue';
 import BibleVerse from '../views/Bible/Verse.vue';
 import HelloWorld from '../views/HelloWorld.vue';
 
-
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -17,19 +16,19 @@ const routes: Array<RouteRecordRaw> = [
         path: '/bible',
         name: 'bible.index',
         component: BibleIndex,
-        props: { bible: Api.getBible() }
+        props: { bible: Api.getBible() },
     },
     {
         path: '/bible/:testament/:book',
         name: 'bible.book',
         component: BibleBook,
-        props: route => ({ book: Api.getBook(route.params) })
+        props: (route) => ({ book: Api.getBook(route.params) }),
     },
     {
         path: '/bible/:testament/:book/:verses(\\d+|\\d+-\\d+)',
         name: 'bible.verse',
         component: BibleVerse,
-        props: route => ({ verses: Api.getVerse(route) })
+        props: (route) => ({ verses: Api.getVerse(route) }),
     },
     {
         path: '/about',
