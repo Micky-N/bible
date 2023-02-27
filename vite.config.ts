@@ -1,18 +1,18 @@
-import { fileURLToPath, URL } from 'url'
-import { rmSync } from 'node:fs'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import electron from 'vite-plugin-electron'
-import renderer from 'vite-plugin-electron-renderer'
-import pkg from './package.json'
+import { fileURLToPath, URL } from 'url';
+import { rmSync } from 'node:fs';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import electron from 'vite-plugin-electron';
+import renderer from 'vite-plugin-electron-renderer';
+import pkg from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
-    rmSync('dist-electron', { recursive: true, force: true })
+    rmSync('dist-electron', { recursive: true, force: true });
 
-    const isServe = command === 'serve'
-    const isBuild = command === 'build'
-    const sourcemap = isServe || !!process.env.VSCODE_DEBUG
+    const isServe = command === 'serve';
+    const isBuild = command === 'build';
+    const sourcemap = isServe || !!process.env.VSCODE_DEBUG;
 
     return {
         resolve: {
@@ -30,9 +30,36 @@ export default defineConfig(({ command }) => {
                         if (process.env.VSCODE_DEBUG) {
                             console.log(
                                 /* For `.vscode/.debug.script.mjs` */ '[startup] Electron App'
-                            )
+                            );
                         } else {
-                            options.startup()
+                            options.startup();
+                        }
+                    },
+                    vite: {
+                        build: {
+                            sourcemap,
+                            minify: isBuild,
+                            outDir: 'dist-electron/main',
+                            rollupOptions: {
+                                external: Object.keys(
+                                    'dependencies' in pkg
+                                        ? pkg.dependencies
+                                        : {}
+                                ),
+                            },
+                        },
+                    },
+                },
+                {
+                    // Main-Process entry file of the Electron App.
+                    entry: 'electron/main',
+                    onstart(options) {
+                        if (process.env.VSCODE_DEBUG) {
+                            console.log(
+                                /* For `.vscode/.debug.script.mjs` */ '[startup] Electron App'
+                            );
+                        } else {
+                            options.startup();
                         }
                     },
                     vite: {
@@ -55,7 +82,7 @@ export default defineConfig(({ command }) => {
                     onstart(options) {
                         // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete,
                         // instead of restarting the entire Electron App.
-                        options.reload()
+                        options.reload();
                     },
                     vite: {
                         build: {
@@ -79,5 +106,5 @@ export default defineConfig(({ command }) => {
             }),
         ],
         clearScreen: false,
-    }
-})
+    };
+});

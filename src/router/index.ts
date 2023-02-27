@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HelloWorld from '../views/HelloWorld.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import Bible from '../views/Bible.vue';
+import HelloWorld from '../views/HelloWorld.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -7,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Home',
         component: HelloWorld,
         props: { msg: 'Electron + Vite + Vue' },
+    },
+    {
+        path: '/bible',
+        name: 'Bible',
+        component: Bible,
     },
     {
         path: '/about',
@@ -17,9 +23,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
             import(/* webpackChunkName: "about" */ '../views/About.vue'),
     },
-]
+];
 const router = createRouter({
     history: createWebHistory(),
     routes,
-})
-export default router
+});
+export default router;

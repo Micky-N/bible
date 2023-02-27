@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useCounterStore } from '../store'
+import { storeToRefs } from 'pinia';
+import { useBibleStore } from '../store';
 
-defineProps<{ msg: string }>()
+defineProps<{ msg: string }>();
 
-const store = useCounterStore()
-// `name` and `doubleCount` are reactive refs
-// This will also extract refs for properties added by plugins
-// but skip any action or non reactive (non ref/reactive) property
-const { name, count } = storeToRefs(store)
-// the increment action can just be destructured
-const { increment } = store
+const store = useBibleStore();
 </script>
 
 <template>
     <h1>{{ msg }}</h1>
 
     <div class="card">
-        <button type="button" @click="increment">count is {{ count }}</button>
         <p>
             Edit
             <code>components/HelloWorld.vue</code> to test HMR

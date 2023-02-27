@@ -1,0 +1,32 @@
+[
+    {
+        "abbreviation": "DRB",
+        "language": "fr",
+        "description": "Bible Darby 1885",
+        "guid": "wzN3MHnH4EqF302GxODdtg"
+    },
+    {
+        "abbreviation": "MAB",
+        "language": "fr",
+        "description": "Bible Martin 1744",
+        "guid": "YDTtZFuD50WvGPxLn2kfjg"
+    },
+    {
+        "abbreviation": "OS",
+        "language": "fr",
+        "description": "Bible Ostervald 1996",
+        "guid": "HB2B81JgHEeCxMacsSnESw"
+    },
+    {
+        "abbreviation": "S21",
+        "language": "fr",
+        "description": "Bible Segond 21",
+        "guid": "YifIs3pOjkCNRDJgFahinQ"
+    },
+    {
+        "abbreviation": "BDS",
+        "language": "fr",
+        "description": "Bible du Semeur",
+        "guid": "Pem02Ni75UeIzpXBEknntw"
+    }
+]
