@@ -1,15 +1,15 @@
 interface IBible {
-    Text: string;
-    Testaments: [
+    testaments: [
         {
-            Text: string;
-            Books: [
+            value: string;
+            books: [
                 {
-                    Text: string;
-                    Chapters: [
+                    value: string;
+                    chapters: [
                         {
-                            Text: string;
-                            Verses: [{}];
+                            verses: [{
+                                value: string
+                            }];
                         }
                     ];
                 }

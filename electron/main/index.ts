@@ -118,6 +118,14 @@ ipcMain.on('bible', (event) => {
     event.returnValue = new Bible().getBible()
 });
 
+ipcMain.on('book', (event, params) => {
+    event.returnValue = new Bible().getBook(params)
+});
+
+ipcMain.on('verses', (event, params) => {
+    event.returnValue = new Bible().getVerses(params)
+});
+
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);
 });

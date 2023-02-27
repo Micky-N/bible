@@ -13,13 +13,21 @@ export default class Bible {
         this.extension = '.json';
     }
 
-    getBible() {
+    getBible(): IBible {
         const bible = path.resolve(
             this.folder,
             this.language,
             this.getVersion()
         );
         return require(bible);
+    }
+
+    getBook({testament, book}: {testament: number, book: number}) {
+        return this.getBible().testaments[testament].books[book]
+    }
+
+    getVerses({testament, book, verses}: {testament: number, book: number, verses: number|string}) {
+        return this.getBible().testaments[testament].books[book]
     }
 
     getVersion(): string {
