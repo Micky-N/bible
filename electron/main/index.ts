@@ -113,3 +113,7 @@ ipcMain.handle('open-win', (_, arg) => {
         childWindow.loadFile(indexHtml, { hash: arg });
     }
 });
+
+ipcMain.on('readBible', () => {
+    win.loadURL(url + 'bible');
+});

@@ -5,7 +5,7 @@
                 <a class="nav-link">home</a>
             </li>
             <li class="nav-item">
-                <a @click="readBible" class="nav-link">bible</a>
+                <ipc-link link="readBible" title="bible" />
             </li>
             <li class="nav-item">
                 <a class="nav-link">about</a>
@@ -15,13 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { IpcRenderer } from "electron/renderer";
-import { inject } from "vue"
-
-const ipcRenderer: IpcRenderer = inject('ipcRenderer') as IpcRenderer
-    const readBible = () => {
-        ipcRenderer.send('readBible')
-    }
+import IpcLink from "./IpcLink.vue";
 </script>
 
 <style></style>
