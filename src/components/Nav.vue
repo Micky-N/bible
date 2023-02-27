@@ -2,20 +2,19 @@
     <div>
         <div class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link">home</a>
+                <router-link :to="{name: 'home'}" class="nav-link">home</router-link>
             </li>
             <li class="nav-item">
-                <ipc-link link="readBible" title="bible" />
+                <router-link :to="{name: 'bible'}" class="nav-link">bible</router-link>
             </li>
             <li class="nav-item">
-                <a class="nav-link">about</a>
+                <router-link :to="{name: 'about'}" class="nav-link">about</router-link>
             </li>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import IpcLink from "./IpcLink.vue";
 </script>
 
 <style></style>

@@ -54,7 +54,6 @@ async function createWindow() {
             'main-process-message',
             new Date().toLocaleString()
         );
-        win.webContents.send('bible', new Bible().getBible());
     });
 
     win.webContents.setWindowOpenHandler(({ url }) => {
@@ -114,6 +113,15 @@ ipcMain.handle('open-win', (_, arg) => {
     }
 });
 
-ipcMain.on('readBible', () => {
-    win.loadURL(url + 'bible');
+
+ipcMain.on('bible', (event) => {
+    event.returnValue = new Bible().getBible()
+});
+
+ipcMain.on('home', (event) => {
+    event.sender.loadURL(url);
+});
+
+ipcMain.on('about', (event) => {
+    event.sender.loadURL(url+'about');
 });

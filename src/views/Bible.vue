@@ -1,34 +1,28 @@
 <template>
     <div>
         <aside>
+            {{ name }}
             <ul>
-                <li v-for="testament in testaments"></li>
+                {{ testaments }}
             </ul>
         </aside>
     </div>
 </template>
 
 <script setup lang="ts">
-import { IpcRenderer } from 'electron';
-import { computed, inject, onMounted, Ref, ref } from 'vue';
-let bible: Ref<{
-    Testaments: any[];
-    Text: string;
-}> = ref({
-    Testaments: [],
-    Text: '',
-});
-onMounted(() => {
-    const ipcRenderer: IpcRenderer = inject('ipcRenderer') as IpcRenderer;
-    ipcRenderer.on('bible', (event, arg) => {
-        bible = ref(arg);
-        console.log(arg)
-    });
-});
+import { computed } from "vue"
 
-let testaments = computed(() => {
-    return bible.value;
-});
+const props = defineProps({
+    bible: {type: Object, default: () => {}}
+})
+
+const testaments = computed(() => {
+    const t: [{value: string}] = props.bible.testaments
+    return t.map(testament => testament.value)
+})
+
+const name = 'test'
+
 </script>
 
 <style></style>
