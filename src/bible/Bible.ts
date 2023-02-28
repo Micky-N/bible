@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { BibleT, VersionT } from '../types/Bible';
+import { BibleT, VerseT, VersionT } from '../types/Bible';
 
 export default class Bible {
     private extension: string;
@@ -59,13 +59,55 @@ export default class Bible {
     getVerses({
         testament,
         book,
+        chapter,
         verses,
     }: {
         testament: number;
         book: number;
+        chapter: number;
         verses: number | string;
-    }) {
-        return this.getBible().testaments[testament].books[book];
+    }): VerseT[] {
+        const allVerses =
+            this.getBible().testaments[testament].books[book].chapters[chapter]
+                .verses;
+        if (typeof verses == 'string') {
+            if (verses == '*') {
+                return allVerses;
+            } else {
+                if (verses.includes('-')) {
+                    const versesSplit = verses
+                        .split('-')
+                        .map((verse) => parseInt(verse));
+                    return allVerses.filter((verse, index) => {
+                        verse.id = index;
+                        const isValid =
+                            versesSplit[0] <= index && index <= versesSplit[1];
+                        if (isValid) {
+                            verse.id = index;
+                        }
+                        return isValid;
+                    });
+                } else {
+                    const versesSplit = parseInt(verses);
+                    return allVerses.filter((verse, index) => {
+                        const isValid = versesSplit == index;
+                        if (isValid) {
+                            verse.id = index;
+                        }
+                        return isValid;
+                    });
+                }
+            }
+        } else if (typeof verses == 'number') {
+            return allVerses.filter((verse, index) => {
+                const isValid = verses == index;
+                if (isValid) {
+                    verse.id = index;
+                }
+                return isValid;
+            });
+        }
+        return allVerses;
     }
 
     getVersions(): VersionT[] {

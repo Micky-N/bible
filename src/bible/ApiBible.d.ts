@@ -1,4 +1,4 @@
-import { BibleStoreT, BibleT, BookT, VerseT, VersionT } from '../types/Bible';
+import { BibleStoreT, BookT, VerseT, VersionT } from '../types/Bible';
 
 export declare function getTestaments(state: BibleStoreT): string[];
 
@@ -10,4 +10,4 @@ export declare function getBook(state: BibleStoreT): BookT;
 
 export declare function getVersions(): VersionT[];
 
-export declare function getVersion(version: string): VersionT;
+export declare function getVersion(state: BibleStoreT): VersionT;

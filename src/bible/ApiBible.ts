@@ -5,7 +5,7 @@ export const getTestaments = (state: BibleStoreT): string[] => {
     return ipcRenderer.sendSync('testaments', state) as string[];
 };
 
-export const getVerse = (state: BibleStoreT): VerseT[] => {
+export const getVerses = (state: BibleStoreT): VerseT[] => {
     return ipcRenderer.sendSync('verses', state);
 };
 
@@ -21,14 +21,14 @@ export const getVersions = (): VersionT[] => {
     return ipcRenderer.sendSync('versions');
 };
 
-export const getVersion = (version: string): VersionT => {
-    return ipcRenderer.sendSync('version', version);
+export const getVersion = (state: BibleStoreT): VersionT => {
+    return ipcRenderer.sendSync('version', state);
 };
 
 export default {
     getTestaments,
     getBooks,
-    getVerse,
+    getVerses,
     getBook,
     getVersion,
     getVersions,

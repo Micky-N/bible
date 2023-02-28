@@ -32,18 +32,17 @@ import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { storeToRefs } from 'pinia';
-import Api from '../../bible/ApiBible'
+import Api from '../../bible/ApiBible';
 
 const bibleStore = useBibleStore();
 
-const { testament, book, chapter } =
-    storeToRefs(bibleStore);
+const { testament, book, chapter } = storeToRefs(bibleStore);
 
 onMounted(() => {
     chapter.value = 0;
 });
 
-const testaments = computed(() => Api.getTestaments(bibleStore.getInstance))
+const testaments = computed(() => Api.getTestaments(bibleStore.getInstance));
 
 const currentTestament = computed(() => testaments.value[testament.value]);
 

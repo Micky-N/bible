@@ -18,6 +18,7 @@ export type TestamentT = {
 
 export type VerseT = {
     value: string;
+    id?: number;
 };
 
 export type VersionT = {

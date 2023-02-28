@@ -12,7 +12,9 @@ const props = defineProps<{
 
 const scripture = computed(() => {
     return props.verses
-        .map((verse, index) => verseNumber(index) + ' ' + verse.value)
+        .map(
+            (verse, index) => verseNumber(verse.id || index) + ' ' + verse.value
+        )
         .join(' ');
 });
 const verseNumber = (index: number) => `<sup>${index + 1}</sup>`;

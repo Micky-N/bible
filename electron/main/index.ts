@@ -127,12 +127,12 @@ ipcMain.on('book', (event, state) => {
         .getBook(state.testament, state.book);
 });
 
-ipcMain.on('verses', (event, state, params) => {
-    event.returnValue = new Bible().fromState(state).getVerses(params);
+ipcMain.on('verses', (event, state) => {
+    event.returnValue = new Bible().fromState(state).getVerses(state);
 });
 
-ipcMain.on('version', (event, version: string) => {
-    event.returnValue = new Bible(version).getVersion();
+ipcMain.on('version', (event, state) => {
+    event.returnValue = new Bible().fromState(state).getVersion();
 });
 
 ipcMain.on('versions', (event) => {
