@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
     currentBook: number;
     books: string[];
 }>();

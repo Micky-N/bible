@@ -1,7 +1,7 @@
 <template>
-    <p>{{ getBook.value + ' - ' + (chapter + 1) }}</p>
+    <p>{{ book.value + ' - ' + (chapter + 1) }}</p>
     <select v-model="version">
-        <option :selected="v.guid == version" v-for="v in getVersions" :key="v.guid" :value="v.guid">{{ v.description }}</option>
+        <option :selected="v.guid == version" v-for="v in versions" :key="v.guid" :value="v.guid">{{ v.description }}</option>
     </select>
     <chapter-nav
         @select-chapter="selectChapter"
@@ -17,21 +17,24 @@ import Chapter from '@/components/Bible/Chapter.vue';
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useBibleStore } from '../../store/BibleStore';
+import Api from '../../bible/ApiBible'
 
 const bibleStore = useBibleStore();
 
-const { getBook, chapter, getVersions, version } = storeToRefs(bibleStore);
+const { chapter, version } = storeToRefs(bibleStore);
+
+const book = computed(() => Api.getBook(bibleStore.getInstance))
+
+const versions = Api.getVersions()
 
 const selectChapter = (selectedChapter: number) => {
     chapter.value = selectedChapter;
 };
 
-const currentChapter = computed(() => {
-    return getBook.value.chapters[chapter.value];
-});
+const currentChapter = computed(() => book.value.chapters[chapter.value]);
 
 const chapters = computed(() => {
-    return Array.from(Object.keys(getBook.value.chapters).keys());
+    return Array.from(Object.keys(book.value.chapters).keys());
 });
 </script>
 

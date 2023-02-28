@@ -27,32 +27,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onMounted } from 'vue';
+import { computed, watch, onMounted, ref } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { storeToRefs } from 'pinia';
+import Api from '../../bible/ApiBible'
 
 const bibleStore = useBibleStore();
 
-const { getTestaments, getBooks, testament, book, chapter } =
+const { testament, book, chapter } =
     storeToRefs(bibleStore);
 
 onMounted(() => {
     chapter.value = 0;
 });
 
-const currentTestament = computed(() => getTestaments.value[testament.value]);
+const testaments = computed(() => Api.getTestaments(bibleStore.getInstance))
 
-const books = computed(() => {
-    return getBooks.value;
-});
+const currentTestament = computed(() => testaments.value[testament.value]);
+
+const books = computed(() => Api.getBooks(bibleStore.getInstance));
 
 const currentBook = computed(() => books.value[book.value]);
-
-const testaments = computed(() => {
-    return getTestaments.value.map((testament: string) => testament);
-});
 
 const selectTestament = (idTestament: number) => {
     testament.value = idTestament;
