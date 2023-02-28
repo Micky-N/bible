@@ -11,13 +11,10 @@
 </template>
 
 <script setup lang="ts">
-const props: {
+const props = defineProps<{
     currentTestament: number;
     testaments: string[];
-} = defineProps({
-    currentTestament: { type: Number },
-    testaments: { type: Array },
-});
+}>();
 </script>
 
 <style scoped>

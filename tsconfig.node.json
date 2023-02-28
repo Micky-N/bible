@@ -11,6 +11,7 @@
         "package.json",
         "electron",
         "src/bible",
-        "src/utils"
+        "src/utils",
+        "src/types/Bible.ts"
     ]
 }

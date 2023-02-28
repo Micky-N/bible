@@ -1,5 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Api from '@/bible/ApiBible';
+import {
+    createRouter,
+    createWebHistory,
+    RouteParams,
+    RouteRecordRaw,
+} from 'vue-router';
+import Api from '../bible/ApiBible';
 import BibleIndex from '../views/Bible/Index.vue';
 import BibleBook from '../views/Bible/Book.vue';
 import BibleVerse from '../views/Bible/Verse.vue';
@@ -16,19 +21,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/bible',
         name: 'bible.index',
         component: BibleIndex,
-        props: { bible: Api.getBible() },
     },
     {
-        path: '/bible/:testament/:book',
+        path: '/bible/book',
         name: 'bible.book',
         component: BibleBook,
-        props: (route) => ({ book: Api.getBook(route.params) }),
     },
     {
         path: '/bible/:testament/:book/:verses(\\d+|\\d+-\\d+)',
         name: 'bible.verse',
         component: BibleVerse,
-        props: (route) => ({ verses: Api.getVerse(route) }),
     },
     {
         path: '/about',

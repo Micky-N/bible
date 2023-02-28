@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { useBibleStore } from '../store';
+import { useBibleStore } from '../store/BibleStore';
 
 defineProps<{ msg: string }>();
 

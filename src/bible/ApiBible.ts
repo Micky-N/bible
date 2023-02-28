@@ -1,15 +1,35 @@
 import { ipcRenderer } from 'electron';
+import { BibleStoreT, BibleT, BookT, VerseT, VersionT } from '../types/Bible';
 
-export const getBible = (): IBible => {
-    return ipcRenderer.sendSync('bible') as IBible;
+export const getTestaments = (state: BibleStoreT): string[] => {
+    return ipcRenderer.sendSync('testaments', state) as string[];
 };
 
-export const getVerse = (params) => {
-    return ipcRenderer.sendSync('verses', params);
+export const getVerse = (state: BibleStoreT): VerseT[] => {
+    return ipcRenderer.sendSync('verses', state);
 };
 
-export const getBook = (params) => {
-    return ipcRenderer.sendSync('book', params);
+export const getBooks = (state: BibleStoreT): string[] => {
+    return ipcRenderer.sendSync('books', state);
 };
 
-export default { getBible, getVerse, getBook };
+export const getBook = (state: BibleStoreT): BookT => {
+    return ipcRenderer.sendSync('book', state);
+};
+
+export const getVersions = (): VersionT[] => {
+    return ipcRenderer.sendSync('versions');
+};
+
+export const getVersion = (version: string): VersionT => {
+    return ipcRenderer.sendSync('version', version);
+};
+
+export default {
+    getTestaments,
+    getBooks,
+    getVerse,
+    getBook,
+    getVersion,
+    getVersions,
+};

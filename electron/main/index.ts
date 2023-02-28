@@ -113,16 +113,30 @@ ipcMain.handle('open-win', (_, arg) => {
     }
 });
 
-ipcMain.on('bible', (event) => {
-    event.returnValue = new Bible().getBible();
+ipcMain.on('testaments', (event, state) => {
+    event.returnValue = new Bible().fromState(state).getTestaments();
 });
 
-ipcMain.on('book', (event, params) => {
-    event.returnValue = new Bible().getBook(params);
+ipcMain.on('books', (event, state) => {
+    event.returnValue = new Bible().fromState(state).getBooks(state.testament);
 });
 
-ipcMain.on('verses', (event, params) => {
-    event.returnValue = new Bible().getVerses(params);
+ipcMain.on('book', (event, state) => {
+    event.returnValue = new Bible()
+        .fromState(state)
+        .getBook(state.testament, state.book);
+});
+
+ipcMain.on('verses', (event, state, params) => {
+    event.returnValue = new Bible().fromState(state).getVerses(params);
+});
+
+ipcMain.on('version', (event, version: string) => {
+    event.returnValue = new Bible(version).getVersion();
+});
+
+ipcMain.on('versions', (event) => {
+    event.returnValue = new Bible().getVersions();
 });
 
 ipcMain.on('home', (event) => {

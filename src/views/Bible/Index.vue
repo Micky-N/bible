@@ -5,7 +5,6 @@
             <router-link
                 :to="{
                     name: 'bible.book',
-                    params: { testament: idTestament, book: idBook },
                 }"
                 >Go book</router-link
             >
@@ -13,7 +12,7 @@
                 <testaments
                     @select-testament="selectTestament"
                     :testaments="testaments"
-                    :current-testament="idTestament"
+                    :current-testament="testament"
                 />
             </div>
         </aside>
@@ -21,53 +20,51 @@
             <books
                 @select-book="selectBook"
                 :books="books"
-                :current-book="idBook"
+                :current-book="book"
             />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, watch, onMounted } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
+import { useBibleStore } from '../../store/BibleStore';
+import { storeToRefs } from 'pinia';
 
-const props: {
-    bible: IBible;
-} = defineProps({
-    bible: { type: Object, default: () => {} },
+const bibleStore = useBibleStore();
+
+const { getTestaments, getBooks, testament, book, chapter } =
+    storeToRefs(bibleStore);
+
+onMounted(() => {
+    chapter.value = 0;
 });
 
-const idTestament = ref(0);
-const idBook = ref(0);
-const currentTestament = computed(
-    () => props.bible.testaments[idTestament.value].value
-);
-const currentBook = computed(
-    () => props.bible.testaments[idTestament.value].books[idBook.value].value
-);
-
-const testaments = computed(() => {
-    return props.bible.testaments.map((testament) => testament.value);
-});
+const currentTestament = computed(() => getTestaments.value[testament.value]);
 
 const books = computed(() => {
-    return props.bible.testaments[idTestament.value].books.map(
-        (book) => book.value
-    );
+    return getBooks.value;
 });
 
-const selectTestament = (testament: number) => {
-    idTestament.value = testament;
+const currentBook = computed(() => books.value[book.value]);
+
+const testaments = computed(() => {
+    return getTestaments.value.map((testament: string) => testament);
+});
+
+const selectTestament = (idTestament: number) => {
+    testament.value = idTestament;
 };
 
-const selectBook = (book: number) => {
-    idBook.value = book;
+const selectBook = (idBook: number) => {
+    book.value = idBook;
 };
 
-watch(idTestament, (newValue, oldValue) => {
+watch(testament, (newValue, oldValue) => {
     if (newValue !== oldValue) {
-        idBook.value = 0;
+        book.value = 0;
     }
 });
 </script>

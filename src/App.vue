@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import Nav from './components/Nav.vue';
+import Nav from '@/components/Nav.vue';
+import { useBibleStore } from './store/BibleStore';
+
+useBibleStore();
+
 console.log(
     '[App.vue]',
     `Hello world from Electron ${process.versions.electron}!`
@@ -9,6 +13,19 @@ console.log(
 <template>
     <div>
         <Nav />
+        <a href="https://www.electronjs.org/" target="_blank">
+            <img
+                src="./assets/electron.svg"
+                class="logo electron"
+                alt="Electron logo"
+            />
+        </a>
+        <a href="https://vitejs.dev/" target="_blank">
+            <img src="./assets/vite.svg" class="logo" alt="Vite logo" />
+        </a>
+        <a href="https://vuejs.org/" target="_blank">
+            <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+        </a>
     </div>
     <router-view />
 </template>
