@@ -22,23 +22,25 @@
 import ChapterNav from '@/components/Bible/ChapterNav.vue';
 import Chapter from '@/components/Bible/Chapter.vue';
 import { computed, inject } from 'vue';
+import { useBibleStore } from '../../store/BibleStore';
+import { ApiBibleT } from '../../types/Bible';
 import { storeToRefs } from 'pinia';
-import { useBibleStore } from '@/store/BibleStore';
-import { ApiBibleT } from '@/types/Bible';
 
 const bibleStore = useBibleStore();
 
-const { chapter, version, verses } = storeToRefs(bibleStore);
+const { setVerses, setChapter } = bibleStore;
+const { chapter, version } = storeToRefs(bibleStore);
 
-const apiBible = inject('ApiBible') as ApiBibleT
-const book = computed(() => apiBible.getBook(bibleStore.getInstance));
+const apiBible = inject('ApiBible') as ApiBibleT;
+
+const book = computed(() => apiBible.getBook(bibleStore.$state));
 
 const versions = apiBible.getVersions();
 
 const selectChapter = (selectedChapter: number) => {
     if (chapter.value != selectedChapter) {
-        verses.value = '*';
-        chapter.value = selectedChapter;
+        setVerses('*');
+        setChapter(selectedChapter);
     }
 };
 

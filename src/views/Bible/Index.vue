@@ -32,39 +32,34 @@ import { computed, watch, onMounted, inject } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
 import SearchBar from '@/components/Bible/SearchBar.vue';
-import { useBibleStore } from '@/store/BibleStore';
+import { useBibleStore } from '../../store/BibleStore';
 import { storeToRefs } from 'pinia';
-import { ApiBibleT } from '@/types/Bible';
+import { ApiBibleT } from '../../types/Bible';
 
 const bibleStore = useBibleStore();
 
-const { testament, book, chapter } = storeToRefs(bibleStore);
+const { setChapter, setTestament, setBook } = bibleStore;
+const { testament, book } = storeToRefs(bibleStore);
 
 onMounted(() => {
-    chapter.value = 0;
+    setChapter(0);
 });
-const apiBible = inject('ApiBible') as ApiBibleT
-const testaments = computed(() => apiBible.getTestaments(bibleStore.getInstance));
+const apiBible = inject('ApiBible') as ApiBibleT;
+const testaments = computed(() => apiBible.getTestaments(bibleStore.$state));
 
 const currentTestament = computed(() => testaments.value[testament.value]);
 
-const books = computed(() => apiBible.getBooks(bibleStore.getInstance));
+const books = computed(() => apiBible.getBooks(bibleStore.$state));
 
 const currentBook = computed(() => books.value[book.value]);
 
 const selectTestament = (idTestament: number) => {
-    testament.value = idTestament;
+    setTestament(idTestament);
 };
 
 const selectBook = (idBook: number) => {
-    book.value = idBook;
+    setBook(idBook);
 };
-
-watch(testament, (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-        book.value = 0;
-    }
-});
 </script>
 
 <style></style>

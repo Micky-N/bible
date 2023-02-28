@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ApiBibleT, ChapterT } from '@/types/Bible';
+import { ApiBibleT, ChapterT } from '../../types/Bible';
 import Verses from '@/components/Bible/Verses.vue';
 import { computed, inject } from 'vue';
 import { useBibleStore } from '../../store/BibleStore';
@@ -13,8 +13,8 @@ import { useBibleStore } from '../../store/BibleStore';
 defineProps<{
     chapter: ChapterT;
 }>();
-const apiBible = inject('ApiBible') as ApiBibleT
-const verses = computed(() => apiBible.getVerses(useBibleStore().getInstance));
+const apiBible = inject('ApiBible') as ApiBibleT;
+const verses = computed(() => apiBible.getVerses(useBibleStore().$state));
 </script>
 
 <style></style>

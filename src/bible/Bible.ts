@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { BibleT, VerseT, VersionT } from '../types/Bible';
+import { BibleStoreT, BibleT, VerseT, VersionT } from '../types/Bible';
 
 export default class Bible {
     private extension: string;
@@ -17,7 +17,7 @@ export default class Bible {
         this.extension = '.json';
     }
 
-    fromState(state: { language: string; version: string }): Bible {
+    fromState(state: BibleStoreT): Bible {
         this.language = state.language;
         this.currentVersion = state.version;
         return this;
