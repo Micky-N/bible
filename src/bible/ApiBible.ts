@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { BibleStoreT, BibleT, BookT, VerseT, VersionT } from '../types/Bible';
+import { BibleStoreT, BookT, VerseT, VersionT } from '../types/Bible';
 
 export const getTestaments = (state: BibleStoreT): string[] => {
     return ipcRenderer.sendSync('testaments', state) as string[];

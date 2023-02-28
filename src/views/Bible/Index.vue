@@ -1,6 +1,7 @@
 <template>
     <div>
         <aside>
+            <search-bar />
             {{ currentTestament }} - {{ currentBook }}
             <router-link
                 :to="{
@@ -30,6 +31,7 @@
 import { computed, watch, onMounted, ref } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
+import SearchBar from '@/components/Bible/SearchBar.vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { storeToRefs } from 'pinia';
 import Api from '../../bible/ApiBible';
