@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { BibleStoreT, BookT, VerseT, VersionT } from '../types/Bible';
 
-const getInstance = (state: &BibleStoreT): BibleStoreT => {
+const getInstance = (state: BibleStoreT): BibleStoreT => {
     return {
         language: state.language,
         version: state.version,
@@ -11,19 +11,38 @@ const getInstance = (state: &BibleStoreT): BibleStoreT => {
         verses: state.verses,
     };
 };
-export const getTestaments = (state: &BibleStoreT): string[] => {
+export const getTestaments = (state: BibleStoreT): string[] => {
     return ipcRenderer.sendSync('testaments', getInstance(state)) as string[];
 };
 
-export const getVerses = (state: &BibleStoreT): VerseT[] => {
+export const getVerses = (state: BibleStoreT): VerseT[] => {
     return ipcRenderer.sendSync('verses', getInstance(state));
 };
 
-export const getBooks = (state: &BibleStoreT): string[] => {
+export const getChapter = (
+    state: BibleStoreT,
+    idTestament: number,
+    idBook: number,
+    idChapter: number
+): [] => {
+    return ipcRenderer.sendSync(
+        'chapter',
+        getInstance(state),
+        idTestament,
+        idBook,
+        idChapter
+    );
+};
+
+export const getAllBooks = (state: BibleStoreT): [] => {
+    return ipcRenderer.sendSync('allBooks', getInstance(state));
+};
+
+export const getBooks = (state: BibleStoreT): string[] => {
     return ipcRenderer.sendSync('books', getInstance(state));
 };
 
-export const getBook = (state: &BibleStoreT): BookT => {
+export const getBook = (state: BibleStoreT): BookT => {
     return ipcRenderer.sendSync('book', getInstance(state));
 };
 
@@ -31,15 +50,26 @@ export const getVersions = (): VersionT[] => {
     return ipcRenderer.sendSync('versions');
 };
 
-export const getVersion = (state: &BibleStoreT): VersionT => {
+export const getVersion = (state: BibleStoreT): VersionT => {
     return ipcRenderer.sendSync('version', getInstance(state));
+};
+
+export const autoCompleteBooks = (state: BibleStoreT, searchValue: string) => {
+    return ipcRenderer.sendSync(
+        'autoCompleteBooks',
+        getInstance(state),
+        searchValue
+    );
 };
 
 export default {
     getTestaments,
     getBooks,
+    getAllBooks,
     getVerses,
+    getChapter,
     getBook,
     getVersion,
     getVersions,
+    autoCompleteBooks,
 };

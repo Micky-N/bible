@@ -1,5 +1,11 @@
 import path from 'node:path';
-import { BibleStoreT, BibleT, VerseT, VersionT } from '../types/Bible';
+import {
+    AutoCompleteT,
+    BibleStoreT,
+    BibleT,
+    VerseT,
+    VersionT,
+} from '../types/Bible';
 
 export default class Bible {
     private extension: string;
@@ -44,6 +50,20 @@ export default class Bible {
         return this.getBible().testaments[idTestament].books.map(
             (book) => book.value
         );
+    }
+
+    getAllBooks() {
+        const books = [];
+        this.getBible().testaments.forEach((testament, idTestament) => {
+            this.getBooks(idTestament).forEach((book, idBook) => {
+                books.push({
+                    idTestament,
+                    idBook,
+                    book,
+                });
+            });
+        });
+        return books;
     }
 
     getBook(idTestament: number, idBook: number) {
@@ -120,5 +140,31 @@ export default class Bible {
             '../../src/bible/versions.json'
         ));
         return versions.find((vs) => vs.guid == this.currentVersion);
+    }
+
+    getAutoCompleteBooks(searchValue: string): string[] {
+        const matchedBooks: string[] = [];
+        this.getBible().testaments.forEach((testament, idTestament) => {
+            this.getBooks(idTestament).forEach((book) => {
+                if (
+                    searchValue.length >= 3 &&
+                    this.matchBook(book, searchValue)
+                ) {
+                    matchedBooks.push(book);
+                }
+            });
+        });
+        return matchedBooks;
+    }
+
+    private matchBook(bookName: string, searchValue: string): boolean {
+        const bookNormalize = bookName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+        const regexSearch = new RegExp(`^${searchValue}`, 'i');
+        if (regexSearch.test(bookNormalize)) {
+            return true;
+        }
+        return false;
     }
 }

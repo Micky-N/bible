@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { BibleStoreT } from '../types/Bible';
+import { BibleStoreT, LastSearchBibleT } from '../types/Bible';
 
 export const useBibleStore = defineStore('bibleStore', {
     state: (): BibleStoreT => ({
@@ -33,8 +33,12 @@ export const useBibleStore = defineStore('bibleStore', {
         setVerses(verses: string | number) {
             this.verses = verses;
         },
-        setLastSearch(lastSearch?: string) {
+        setLastSearch(lastSearch?: LastSearchBibleT) {
             this.lastSearch = lastSearch;
+        },
+        saveSearch() {
+            const { testament, book, chapter, verses } = this.$state;
+            this.lastSearch = { testament, book, chapter, verses };
         },
     },
 });

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onMounted, inject } from 'vue';
+import { computed, onMounted, inject } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
 import SearchBar from '@/components/Bible/SearchBar.vue';
@@ -45,6 +45,7 @@ onMounted(() => {
     setChapter(0);
 });
 const apiBible = inject('ApiBible') as ApiBibleT;
+
 const testaments = computed(() => apiBible.getTestaments(bibleStore.$state));
 
 const currentTestament = computed(() => testaments.value[testament.value]);

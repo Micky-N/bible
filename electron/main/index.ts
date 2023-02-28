@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain, ipcRenderer } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
 import Bible from '../../src/bible/Bible';
+import { BibleStoreT } from '../../src/types/Bible';
 
 process.env.DIST_ELECTRON = join(__dirname, '..');
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist');
@@ -113,31 +114,59 @@ ipcMain.handle('open-win', (_, arg) => {
     }
 });
 
-ipcMain.on('testaments', (event, state) => {
+ipcMain.on('testaments', (event, state: BibleStoreT) => {
     event.returnValue = new Bible().fromState(state).getTestaments();
 });
 
-ipcMain.on('books', (event, state) => {
+ipcMain.on('books', (event, state: BibleStoreT) => {
     event.returnValue = new Bible().fromState(state).getBooks(state.testament);
 });
 
-ipcMain.on('book', (event, state) => {
+ipcMain.on('allBooks', (event, state: BibleStoreT) => {
+    event.returnValue = new Bible().fromState(state).getAllBooks();
+});
+
+ipcMain.on('book', (event, state: BibleStoreT) => {
     event.returnValue = new Bible()
         .fromState(state)
         .getBook(state.testament, state.book);
 });
 
-ipcMain.on('verses', (event, state) => {
+ipcMain.on(
+    'chapter',
+    (
+        event,
+        state: BibleStoreT,
+        idTestament: number,
+        idBook: number,
+        idChapter: number
+    ) => {
+        event.returnValue = new Bible()
+            .fromState(state)
+            .getChapter(idTestament, idBook, idChapter);
+    }
+);
+
+ipcMain.on('verses', (event, state: BibleStoreT) => {
     event.returnValue = new Bible().fromState(state).getVerses(state);
 });
 
-ipcMain.on('version', (event, state) => {
+ipcMain.on('version', (event, state: BibleStoreT) => {
     event.returnValue = new Bible().fromState(state).getVersion();
 });
 
 ipcMain.on('versions', (event) => {
     event.returnValue = new Bible().getVersions();
 });
+
+ipcMain.on(
+    'autoCompleteBooks',
+    (event, state: BibleStoreT, searchValue: string) => {
+        event.returnValue = new Bible()
+            .fromState(state)
+            .getAutoCompleteBooks(searchValue);
+    }
+);
 
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);

@@ -35,14 +35,29 @@ export type BibleStoreT = {
     book: number;
     chapter: number;
     verses: number | string;
-    lastSearch?: string;
+    lastSearch?: LastSearchBibleT;
+};
+
+export type LastSearchBibleT = {
+    testament: number;
+    book: number;
+    chapter: number;
+    verses: number | string;
 };
 
 export type ApiBibleT = {
     getTestaments: function;
     getVerses: function;
     getBooks: function;
+    getChapter: function;
+    getAllBooks: function;
     getBook: function;
     getVersions: function;
     getVersion: function;
+    autoCompleteBooks: function;
+};
+
+export type AutoCompleteT = {
+    id: number | string;
+    value: string;
 };
