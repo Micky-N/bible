@@ -28,13 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onMounted, ref } from 'vue';
+import { computed, watch, onMounted, inject } from 'vue';
 import Testaments from '@/components/Bible/Testaments.vue';
 import Books from '@/components/Bible/Books.vue';
 import SearchBar from '@/components/Bible/SearchBar.vue';
-import { useBibleStore } from '../../store/BibleStore';
+import { useBibleStore } from '@/store/BibleStore';
 import { storeToRefs } from 'pinia';
-import Api from '../../bible/ApiBible';
+import { ApiBibleT } from '@/types/Bible';
 
 const bibleStore = useBibleStore();
 
@@ -43,12 +43,12 @@ const { testament, book, chapter } = storeToRefs(bibleStore);
 onMounted(() => {
     chapter.value = 0;
 });
-
-const testaments = computed(() => Api.getTestaments(bibleStore.getInstance));
+const apiBible = inject('ApiBible') as ApiBibleT
+const testaments = computed(() => apiBible.getTestaments(bibleStore.getInstance));
 
 const currentTestament = computed(() => testaments.value[testament.value]);
 
-const books = computed(() => Api.getBooks(bibleStore.getInstance));
+const books = computed(() => apiBible.getBooks(bibleStore.getInstance));
 
 const currentBook = computed(() => books.value[book.value]);
 

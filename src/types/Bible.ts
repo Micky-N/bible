@@ -36,3 +36,12 @@ export type BibleStoreT = {
     chapter: number;
     verses: number | string;
 };
+
+export type ApiBibleT {
+    getTestaments: function;
+    getVerses: function;
+    getBooks: function;
+    getBook: function;
+    getVersions: function;
+    getVersion: function;
+}
