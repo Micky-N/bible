@@ -48,3 +48,9 @@ export type AutoCompleteT = {
     id: number | string;
     value: string;
 };
+
+export type AllBooksT = Array<{
+    idTestament: number,
+    idBook: number,
+    book: string,
+}>

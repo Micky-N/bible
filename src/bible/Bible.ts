@@ -1,5 +1,6 @@
 import path from 'node:path';
 import {
+    AllBooksT,
     AutoCompleteT,
     BibleStoreT,
     BibleT,
@@ -53,7 +54,8 @@ export default class Bible {
         );
     }
 
-    getAllBooks() {
+
+    getAllBooks(): AllBooksT {
         const books = [];
         this.getBible().testaments.forEach((testament, idTestament) => {
             this.getBooks(idTestament).forEach((book, idBook) => {
@@ -179,10 +181,60 @@ export default class Bible {
         if (matches.length < 7) {
             return false;
         }
-        const book = matches[1] ? matches[1] + ' ' + matches[2] : matches[2];
-        const chapter = matches[3];
-        const verses = matches[6];
-        console.log(book, chapter, verses);
-        return false;
+        const bookMatched = matches[1] ? matches[1] + ' ' + matches[2] : matches[2];
+        const chapterMatched = parseInt(matches[3]);
+        const versesMatched = matches[6];
+        const result: LastSearchBibleT = {
+            testament: 0,
+            book: 0, 
+            chapter: 0, 
+            verses: 0
+        }
+        if(!this.isValidSearch({bookMatched, chapterMatched, versesMatched}, result)){
+            return false;
+        }
+        console.log(result)
+        return result;
+    }
+
+    private isValidSearch({bookMatched, chapterMatched, versesMatched}, result: LastSearchBibleT): boolean{
+        let error = false;
+        error = this.findBook(bookMatched, result)
+        if(error){
+            return false;
+        }
+        error = this.checkChapterMax(chapterMatched, result)
+        if(error){
+            return false;
+        }
+        error =this.checkVersesMax(versesMatched, result)
+        if(error){
+            return false;
+        }
+        return true;
+    }
+
+    private findBook(bookName: string, result: LastSearchBibleT){
+        const books: AllBooksT = []
+        const allBooks = this.getAllBooks();
+        allBooks.forEach(b => {
+            if(this.matchBook(b.book, bookName)){
+                books.push(b)
+            }
+        })
+        if(!books.length){
+            return true;
+        }
+        result.testament = books[0].idTestament
+        result.book = books[0].idBook
+        return false
+    }
+
+    private checkChapterMax(idChapter: number, result: LastSearchBibleT){
+        return false
+    }
+
+    private checkVersesMax(verses: number | string, result: LastSearchBibleT){
+        return false
     }
 }
