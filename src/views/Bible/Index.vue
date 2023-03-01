@@ -29,9 +29,9 @@
 
 <script setup lang="ts">
 import { computed, onMounted, inject } from 'vue';
-import Testaments from '@/components/Bible/Testaments.vue';
-import Books from '@/components/Bible/Books.vue';
-import SearchBar from '@/components/Bible/SearchBar.vue';
+import Testaments from '@/components/Bible/Index/Testaments.vue';
+import Books from '@/components/Bible/Index/Books.vue';
+import SearchBar from '@/components/Bible/Search/SearchBar.vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { storeToRefs } from 'pinia';
 import { ApiBibleT } from '../../types/Bible';

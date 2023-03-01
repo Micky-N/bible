@@ -1,6 +1,7 @@
 <template>
     <div>
         <input
+            :ref="searchInput"
             type="text"
             :placeholder="placeholder"
             :value="modelValue"
@@ -23,6 +24,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
+const searchInput = ref(null);
+
 const props = defineProps<{
     autoCompleteCallback: Function;
     modelValue: string;
@@ -43,6 +46,7 @@ const selectAutoCompleteValue = (autoValue: string) => {
     autoCompletes.value = [];
     placeholder.value = autoValue;
     autoCompleted = true;
+    searchInput.value.focus();
     emit('update:modelValue', autoValue);
 };
 

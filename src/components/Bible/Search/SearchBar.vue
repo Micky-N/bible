@@ -49,10 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { ApiBibleT, AutoCompleteT, ChapterT, VerseT } from '../../types/Bible';
+import {
+    ApiBibleT,
+    AutoCompleteT,
+    ChapterT,
+    VerseT,
+} from '../../../types/Bible';
 import { computed, inject, ref, watch } from 'vue';
-import { useBibleStore } from '../../store/BibleStore';
+import { useBibleStore } from '../../../store/BibleStore';
 import AutoComplete from '@/components/Bible/Search/AutoComplete.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const bookSearch = ref('');
 const openSearchForm = ref(false);
@@ -73,11 +79,15 @@ const form = ref<{
         to: undefined,
     },
 });
+
+const router = useRouter();
+const route = useRoute();
 const api = inject('ApiBible') as ApiBibleT;
 const bibleStore = useBibleStore();
 const search = () => {
+    let error = false;
     if (!openSearchForm.value) {
-        searchOne();
+        error = searchOne();
     } else {
         if (
             form.value.testament != undefined &&
@@ -98,12 +108,33 @@ const search = () => {
                 );
             }
             bibleStore.saveSearch();
+        } else {
+            error = true;
+        }
+    }
+
+    if (!error) {
+        let name = 'bible.book';
+        if (typeof bibleStore.verses == 'number') {
+            name = 'bible.verse';
+        }
+        if (route.name !== name) {
+            router.push({ name });
         }
     }
 };
 
 const searchOne = () => {
-    api.search(bibleStore.$state, bookSearch.value);
+    const result = api.search(bibleStore.$state, bookSearch.value);
+    if (!result) {
+        return true;
+    }
+    bibleStore.setTestament(result.testament);
+    bibleStore.setBook(result.book);
+    bibleStore.setChapter(result.chapter);
+    bibleStore.setVerses(result.verses);
+    bibleStore.saveSearch();
+    return false;
 };
 
 const chapters = computed((): ChapterT[] => {

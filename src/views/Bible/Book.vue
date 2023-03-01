@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import ChapterNav from '@/components/Bible/ChapterNav.vue';
-import Chapter from '@/components/Bible/Chapter.vue';
-import SearchBar from '@/components/Bible/SearchBar.vue';
+import ChapterNav from '@/components/Bible/Book/ChapterNav.vue';
+import Chapter from '@/components/Bible/Book/Chapter.vue';
+import SearchBar from '@/components/Bible/Search/SearchBar.vue';
 import { computed, inject } from 'vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { ApiBibleT } from '../../types/Bible';

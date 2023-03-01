@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
         component: BibleBook,
     },
     {
-        path: '/bible/:testament/:book/:verses(\\d+|\\d+-\\d+)',
+        path: '/bible/verse',
         name: 'bible.verse',
         component: BibleVerse,
     },

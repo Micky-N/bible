@@ -171,9 +171,13 @@ export default class Bible {
     }
 
     search(searchText: string): LastSearchBibleT | false {
+        searchText = searchText
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
         const matches = searchText.match(
             /^(\d{0,1})\s*(\w+)\s+(\d{1,3})\s*((:{1}|\s{1})\s*(\d{1,3}(-\d{1,3}){0,1})){0,1}\s*$/
         );
+
         if (!matches || !matches.length) {
             return false;
         }
@@ -204,7 +208,7 @@ export default class Bible {
         ) {
             return false;
         }
-        console.log(result);
+
         return result;
     }
 
@@ -247,6 +251,7 @@ export default class Bible {
     }
 
     private checkChapterMax(idChapter: number, result: LastSearchBibleT) {
+        idChapter = idChapter - 1;
         const chaptersLength = this.getBook(result.testament, result.book)
             .chapters.length;
         if (idChapter < 0) {
@@ -264,7 +269,7 @@ export default class Bible {
 
     private checkVersesMax(verses: number | string, result: LastSearchBibleT) {
         if (typeof verses == 'string') {
-            const versesSplit = verses.split('-').map((v) => parseInt(v));
+            const versesSplit = verses.split('-').map((v) => parseInt(v) - 1);
             if (versesSplit[0] >= versesSplit[1]) {
                 return true;
             }
@@ -295,6 +300,7 @@ export default class Bible {
 
             verses = versesSplit.join('-');
         } else {
+            verses = verses - 1;
             if (verses < 0) {
                 return false;
             }
