@@ -1,11 +1,12 @@
 <template>
     <div>
         <input
-            :ref="searchInput"
+            ref="searchInput"
             type="text"
             :placeholder="placeholder"
             :value="modelValue"
             @input="updateVal($event)"
+            @keydown.tab="selectFirstAutoValue"
         />
         <div v-if="autoCompletes.length">
             <ul style="list-style: none">
@@ -24,7 +25,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-const searchInput = ref(null);
+const searchInput = ref<HTMLInputElement | null>(null);
 
 const props = defineProps<{
     autoCompleteCallback: Function;
@@ -42,12 +43,21 @@ const placeholder = ref('');
 let autoCompleted = false;
 const autoCompletes = ref<string[]>([]);
 
-const selectAutoCompleteValue = (autoValue: string) => {
+const selectAutoCompleteValue = (
+    autoValue: string,
+    autofocus: boolean = true
+) => {
     autoCompletes.value = [];
     placeholder.value = autoValue;
     autoCompleted = true;
-    searchInput.value.focus();
+    autofocus && searchInput.value?.focus();
     emit('update:modelValue', autoValue);
+};
+
+const selectFirstAutoValue = () => {
+    if (autoCompletes.value.length) {
+        selectAutoCompleteValue(autoCompletes.value[0], false);
+    }
 };
 
 watch(

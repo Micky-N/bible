@@ -40,5 +40,8 @@ export const useBibleStore = defineStore('bibleStore', {
             const { testament, book, chapter, verses } = this.$state;
             this.lastSearch = { testament, book, chapter, verses };
         },
+        goToLastSearch() {
+            this.$state = { ...this.$state, ...this.$state.lastSearch };
+        },
     },
 });

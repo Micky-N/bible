@@ -1,5 +1,6 @@
 <template>
     <div>
+        <last-search-button />
         <aside>
             <search-bar />
             {{ currentTestament }} - {{ currentBook }}
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import { computed, onMounted, inject } from 'vue';
 import Testaments from '@/components/Bible/Index/Testaments.vue';
+import LastSearchButton from '@/components/Bible/LastSearchButton.vue';
 import Books from '@/components/Bible/Index/Books.vue';
 import SearchBar from '@/components/Bible/Search/SearchBar.vue';
 import { useBibleStore } from '../../store/BibleStore';
