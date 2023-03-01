@@ -54,7 +54,6 @@ export default class Bible {
         );
     }
 
-
     getAllBooks(): AllBooksT {
         const books = [];
         this.getBible().testaments.forEach((testament, idTestament) => {
@@ -181,7 +180,9 @@ export default class Bible {
         if (matches.length < 7) {
             return false;
         }
-        const bookMatched = matches[1] ? matches[1] + ' ' + matches[2] : matches[2];
+        const bookMatched = matches[1]
+            ? matches[1] + ' ' + matches[2]
+            : matches[2];
         const chapterMatched = parseInt(matches[3]);
         let versesMatched: string | number = '*';
         if (matches[6]) {
@@ -195,49 +196,57 @@ export default class Bible {
             chapter: 0,
             verses: '*',
         };
-        if(!this.isValidSearch({bookMatched, chapterMatched, versesMatched}, result)){
+        if (
+            !this.isValidSearch(
+                { bookMatched, chapterMatched, versesMatched },
+                result
+            )
+        ) {
             return false;
         }
-        console.log(result)
+        console.log(result);
         return result;
     }
 
-    private isValidSearch({bookMatched, chapterMatched, versesMatched}, result: LastSearchBibleT): boolean{
+    private isValidSearch(
+        { bookMatched, chapterMatched, versesMatched },
+        result: LastSearchBibleT
+    ): boolean {
         let error = false;
-        error = this.findBook(bookMatched, result)
-        if(error){
+        error = this.findBook(bookMatched, result);
+        if (error) {
             return false;
         }
-        error = this.checkChapterMax(chapterMatched, result)
-        if(error){
+        error = this.checkChapterMax(chapterMatched, result);
+        if (error) {
             return false;
         }
-        if(versesMatched != '*'){
-            error = this.checkVersesMax(versesMatched, result)
-            if(error){
+        if (versesMatched != '*') {
+            error = this.checkVersesMax(versesMatched, result);
+            if (error) {
                 return false;
             }
         }
         return true;
     }
 
-    private findBook(bookName: string, result: LastSearchBibleT){
-        const books: AllBooksT = []
+    private findBook(bookName: string, result: LastSearchBibleT) {
+        const books: AllBooksT = [];
         const allBooks = this.getAllBooks();
-        allBooks.forEach(b => {
-            if(this.matchBook(b.book, bookName)){
-                books.push(b)
+        allBooks.forEach((b) => {
+            if (this.matchBook(b.book, bookName)) {
+                books.push(b);
             }
-        })
-        if(!books.length){
+        });
+        if (!books.length) {
             return true;
         }
-        result.testament = books[0].idTestament
-        result.book = books[0].idBook
-        return false
+        result.testament = books[0].idTestament;
+        result.book = books[0].idBook;
+        return false;
     }
 
-    private checkChapterMax(idChapter: number, result: LastSearchBibleT){
+    private checkChapterMax(idChapter: number, result: LastSearchBibleT) {
         const chaptersLength = this.getBook(result.testament, result.book)
             .chapters.length;
         if (idChapter < 0) {
@@ -248,12 +257,12 @@ export default class Bible {
             idChapter = chaptersLength - 1;
         }
 
-        result.chapter = idChapter
+        result.chapter = idChapter;
 
         return false;
     }
 
-    private checkVersesMax(verses: number | string, result: LastSearchBibleT){
+    private checkVersesMax(verses: number | string, result: LastSearchBibleT) {
         if (typeof verses == 'string') {
             const versesSplit = verses.split('-').map((v) => parseInt(v));
             if (versesSplit[0] >= versesSplit[1]) {
@@ -284,12 +293,7 @@ export default class Bible {
                 versesSplit.splice(1, 1);
             }
 
-            if(versesSplit.length == 1){
-                verses = versesSplit[0];
-            }else{
-                verses = versesSplit.join('-');
-            }
-
+            verses = versesSplit.join('-');
         } else {
             if (verses < 0) {
                 return false;
@@ -304,9 +308,8 @@ export default class Bible {
             if (verses >= versesLength) {
                 verses = versesLength - 1;
             }
-
         }
-        result.verses = verses
-        return false
+        result.verses = verses;
+        return false;
     }
 }

@@ -50,7 +50,7 @@ export type AutoCompleteT = {
 };
 
 export type AllBooksT = Array<{
-    idTestament: number,
-    idBook: number,
-    book: string,
-}>
+    idTestament: number;
+    idBook: number;
+    book: string;
+}>;
