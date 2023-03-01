@@ -1,5 +1,12 @@
 import { ipcRenderer } from 'electron';
-import { BibleStoreT, BookT, VerseT, VersionT } from '../types/Bible';
+import {
+    BibleStoreT,
+    BookT,
+    ChapterT,
+    LastSearchBibleT,
+    VerseT,
+    VersionT,
+} from '../types/Bible';
 
 const getInstance = (state: BibleStoreT): BibleStoreT => {
     return {
@@ -24,7 +31,7 @@ export const getChapter = (
     idTestament: number,
     idBook: number,
     idChapter: number
-): [] => {
+): ChapterT => {
     return ipcRenderer.sendSync(
         'chapter',
         getInstance(state),
@@ -34,7 +41,9 @@ export const getChapter = (
     );
 };
 
-export const getAllBooks = (state: BibleStoreT): [] => {
+export const getAllBooks = (
+    state: BibleStoreT
+): { idTestament: number; idBook: number; book: string }[] => {
     return ipcRenderer.sendSync('allBooks', getInstance(state));
 };
 
@@ -62,6 +71,13 @@ export const autoCompleteBooks = (state: BibleStoreT, searchValue: string) => {
     );
 };
 
+export const search = (
+    state: BibleStoreT,
+    searchText: string
+): LastSearchBibleT | false => {
+    return ipcRenderer.sendSync('search', getInstance(state), searchText);
+};
+
 export default {
     getTestaments,
     getBooks,
@@ -72,4 +88,5 @@ export default {
     getVersion,
     getVersions,
     autoCompleteBooks,
+    search,
 };

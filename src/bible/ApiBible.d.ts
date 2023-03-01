@@ -2,6 +2,8 @@ import {
     AutoCompleteBookT,
     BibleStoreT,
     BookT,
+    ChapterT,
+    LastSearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
@@ -17,7 +19,7 @@ export declare function getChapter(
     idTestament: number,
     idBook: number,
     idChapter: number
-): string[];
+): ChapterT;
 
 export declare function getBooks(state: BibleStoreT): string[];
 
@@ -33,3 +35,8 @@ export declare function autoCompleteBooks(
     state: BibleStoreT,
     searchValue: string
 ): AutoCompleteBookT[];
+
+export declare function search(
+    state: BibleStoreT,
+    searchText: string
+): LastSearchBibleT | false;

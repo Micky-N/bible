@@ -3,6 +3,7 @@ import {
     AutoCompleteT,
     BibleStoreT,
     BibleT,
+    LastSearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
@@ -165,6 +166,11 @@ export default class Bible {
         if (regexSearch.test(bookNormalize)) {
             return true;
         }
+        return false;
+    }
+
+    search(searchText: string): LastSearchBibleT | false {
+        console.log(searchText);
         return false;
     }
 }

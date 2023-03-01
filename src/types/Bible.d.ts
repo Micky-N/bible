@@ -1,3 +1,4 @@
+import ApiBible from '../bible/ApiBible';
 export type BibleT = {
     testaments: TestamentT[];
 };
@@ -28,13 +29,9 @@ export type VersionT = {
     guid: string;
 };
 
-export type BibleStoreT = {
+export type BibleStoreT = LastSearchBibleT & {
     language: string;
     version: string;
-    testament: number;
-    book: number;
-    chapter: number;
-    verses: number | string;
     lastSearch?: LastSearchBibleT;
 };
 
@@ -45,17 +42,7 @@ export type LastSearchBibleT = {
     verses: number | string;
 };
 
-export type ApiBibleT = {
-    getTestaments: function;
-    getVerses: function;
-    getBooks: function;
-    getChapter: function;
-    getAllBooks: function;
-    getBook: function;
-    getVersions: function;
-    getVersion: function;
-    autoCompleteBooks: function;
-};
+export type ApiBibleT = typeof ApiBible;
 
 export type AutoCompleteT = {
     id: number | string;

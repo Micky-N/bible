@@ -1,10 +1,13 @@
 <template>
     <form @submit.prevent="search">
+        <button type="button" @click="openSearchForm = !openSearchForm">
+            {{ openSearchForm ? '<' : '>' }}
+        </button>
         <auto-complete
             :auto-complete-callback="autoCompleteCallback"
-            v-model="book"
+            v-model="bookSearch"
         />
-        <div>
+        <div v-if="openSearchForm">
             <select v-model="form.chapter">
                 <option
                     selected
@@ -51,7 +54,8 @@ import { computed, inject, ref, watch } from 'vue';
 import { useBibleStore } from '../../store/BibleStore';
 import AutoComplete from '@/components/Bible/Search/AutoComplete.vue';
 
-const book = ref('');
+const bookSearch = ref('');
+const openSearchForm = ref(false);
 const form = ref<{
     testament?: number;
     book?: number;
@@ -72,26 +76,34 @@ const form = ref<{
 const api = inject('ApiBible') as ApiBibleT;
 const bibleStore = useBibleStore();
 const search = () => {
-    if (
-        form.value.testament != undefined &&
-        form.value.book != undefined &&
-        form.value.chapter != undefined
-    ) {
-        bibleStore.setTestament(form.value.testament);
-        bibleStore.setBook(form.value.book);
-        bibleStore.setChapter(form.value.chapter);
-        if (form.value.verses.from != undefined) {
-            bibleStore.setVerses(form.value.verses.from);
+    if (!openSearchForm.value) {
+        searchOne();
+    } else {
+        if (
+            form.value.testament != undefined &&
+            form.value.book != undefined &&
+            form.value.chapter != undefined
+        ) {
+            bibleStore.setTestament(form.value.testament);
+            bibleStore.setBook(form.value.book);
+            bibleStore.setChapter(form.value.chapter);
+            if (form.value.verses.from != undefined) {
+                bibleStore.setVerses(form.value.verses.from);
+            }
+            if (form.value.verses.to != undefined) {
+                bibleStore.setVerses(
+                    bibleStore.$state.verses.toString() +
+                        '-' +
+                        form.value.verses.to.toString()
+                );
+            }
+            bibleStore.saveSearch();
         }
-        if (form.value.verses.to != undefined) {
-            bibleStore.setVerses(
-                bibleStore.$state.verses.toString() +
-                    '-' +
-                    form.value.verses.to.toString()
-            );
-        }
-        bibleStore.saveSearch();
     }
+};
+
+const searchOne = () => {
+    api.search(bibleStore.$state, bookSearch.value);
 };
 
 const chapters = computed((): ChapterT[] => {
@@ -106,7 +118,11 @@ const chapters = computed((): ChapterT[] => {
 });
 
 const verses = computed((): VerseT[] => {
-    if (form.value.chapter != undefined) {
+    if (
+        form.value.testament != undefined &&
+        form.value.book != undefined &&
+        form.value.chapter != undefined
+    ) {
         return api.getChapter(
             bibleStore.$state,
             form.value.testament,
@@ -121,15 +137,14 @@ const autoCompleteCallback = (value: string): AutoCompleteT[] => {
     return api.autoCompleteBooks(bibleStore.$state, value);
 };
 
-watch(book, (value) => {
-    const bookObject: { idTestament: number; idBook: number; book: string } =
-        api
-            .getAllBooks(bibleStore.$state)
-            .find(
-                (b: { idTestament: number; idBook: number; book: string }) =>
-                    b.book == book.value
-            );
-    if (bookObject) {
+watch(bookSearch, () => {
+    const bookObject = api
+        .getAllBooks(bibleStore.$state)
+        .find(
+            (b: { idTestament: number; idBook: number; book: string }) =>
+                b.book == bookSearch.value
+        ) as { idTestament: number; idBook: number; book: string } | undefined;
+    if (bookObject !== undefined) {
         form.value.testament = bookObject.idTestament;
         form.value.book = bookObject.idBook;
     } else {

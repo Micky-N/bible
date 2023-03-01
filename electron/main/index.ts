@@ -168,6 +168,10 @@ ipcMain.on(
     }
 );
 
+ipcMain.on('search', (event, state: BibleStoreT, searchText: string) => {
+    event.returnValue = new Bible().fromState(state).search(searchText);
+});
+
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);
 });
