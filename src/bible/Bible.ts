@@ -183,13 +183,18 @@ export default class Bible {
         }
         const bookMatched = matches[1] ? matches[1] + ' ' + matches[2] : matches[2];
         const chapterMatched = parseInt(matches[3]);
-        const versesMatched = matches[6];
+        let versesMatched: string | number = '*';
+        if (matches[6]) {
+            versesMatched = matches[6].includes('-')
+                ? matches[6]
+                : parseInt(matches[6]);
+        }
         const result: LastSearchBibleT = {
             testament: 0,
-            book: 0, 
-            chapter: 0, 
-            verses: 0
-        }
+            book: 0,
+            chapter: 0,
+            verses: '*',
+        };
         if(!this.isValidSearch({bookMatched, chapterMatched, versesMatched}, result)){
             return false;
         }
@@ -207,9 +212,11 @@ export default class Bible {
         if(error){
             return false;
         }
-        error =this.checkVersesMax(versesMatched, result)
-        if(error){
-            return false;
+        if(versesMatched != '*'){
+            error = this.checkVersesMax(versesMatched, result)
+            if(error){
+                return false;
+            }
         }
         return true;
     }
@@ -231,10 +238,75 @@ export default class Bible {
     }
 
     private checkChapterMax(idChapter: number, result: LastSearchBibleT){
-        return false
+        const chaptersLength = this.getBook(result.testament, result.book)
+            .chapters.length;
+        if (idChapter < 0) {
+            return false;
+        }
+
+        if (idChapter >= chaptersLength) {
+            idChapter = chaptersLength - 1;
+        }
+
+        result.chapter = idChapter
+
+        return false;
     }
 
     private checkVersesMax(verses: number | string, result: LastSearchBibleT){
+        if (typeof verses == 'string') {
+            const versesSplit = verses.split('-').map((v) => parseInt(v));
+            if (versesSplit[0] >= versesSplit[1]) {
+                return true;
+            }
+
+            if (versesSplit[0] < 0) {
+                return true;
+            }
+
+            if (versesSplit[1] < 0) {
+                return true;
+            }
+            const versesLength = this.getChapter(
+                result.testament,
+                result.book,
+                result.chapter
+            ).verses.length;
+            if (versesSplit[0] >= versesLength) {
+                versesSplit[0] = versesLength - 1;
+            }
+
+            if (versesSplit[1] >= versesLength) {
+                versesSplit[1] = versesLength - 1;
+            }
+
+            if (versesSplit[0] == versesSplit[1]) {
+                versesSplit.splice(1, 1);
+            }
+
+            if(versesSplit.length == 1){
+                verses = versesSplit[0];
+            }else{
+                verses = versesSplit.join('-');
+            }
+
+        } else {
+            if (verses < 0) {
+                return false;
+            }
+
+            const versesLength = this.getChapter(
+                result.testament,
+                result.book,
+                result.chapter
+            ).verses.length;
+
+            if (verses >= versesLength) {
+                verses = versesLength - 1;
+            }
+
+        }
+        result.verses = verses
         return false
     }
 }
