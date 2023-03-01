@@ -170,7 +170,19 @@ export default class Bible {
     }
 
     search(searchText: string): LastSearchBibleT | false {
-        console.log(searchText);
+        const matches = searchText.match(
+            /^(\d{0,1})\s*(\w+)\s+(\d{1,3})\s*((:{1}|\s{1})\s*(\d{1,3}(-\d{1,3}){0,1})){0,1}\s*$/
+        );
+        if (!matches || !matches.length) {
+            return false;
+        }
+        if (matches.length < 7) {
+            return false;
+        }
+        const book = matches[1] ? matches[1] + ' ' + matches[2] : matches[2];
+        const chapter = matches[3];
+        const verses = matches[6];
+        console.log(book, chapter, verses);
         return false;
     }
 }
