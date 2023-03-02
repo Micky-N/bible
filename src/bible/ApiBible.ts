@@ -80,7 +80,7 @@ export const search = (
 
 export const getAllVersionsVerse = (
     state: BibleStoreT
-): { [key: string]: VerseT & { version_description: string } } => {
+): { [version_guid: string]: VerseT & { version_description: string } } => {
     return ipcRenderer.sendSync('allVersionsVerse', getInstance(state));
 };
 

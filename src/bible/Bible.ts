@@ -330,7 +330,7 @@ export default class Bible {
         chapter: number;
         verses: number;
     }): {
-        [key: string]: VerseT & { version_guid: string };
+        [version_guid: string]: VerseT & { version_guid: string };
     } {
         const versions = this.getVersions().filter(
             (version) => version.guid != this.currentVersion
