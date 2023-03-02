@@ -349,11 +349,11 @@ export default class Bible {
             });
             if (foundedVerses.length) {
                 const verseToAdd = foundedVerses[0] as VerseT & {
-                    version_guid: string;
+                    version_description: string;
                 };
-                verseToAdd.version_guid = version.guid;
+                verseToAdd.version_description = version.description;
                 verseToAdd.id = verses;
-                versionsVerse[version.description] = verseToAdd;
+                versionsVerse[version.guid] = verseToAdd;
             }
         });
         return versionsVerse;

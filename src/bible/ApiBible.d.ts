@@ -42,5 +42,5 @@ export declare function search(
 ): LastSearchBibleT | false;
 
 export declare function getAllVersionsVerse(state: BibleStoreT): {
-    [key: string]: VerseT & { version_guid: string };
+    [key: string]: VerseT & { version_description: string };
 };
