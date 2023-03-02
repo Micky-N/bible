@@ -81,13 +81,12 @@ const form = ref<{
 });
 
 const router = useRouter();
-const route = useRoute();
 const api = inject('ApiBible') as ApiBibleT;
 const bibleStore = useBibleStore();
 const search = () => {
-    let error = false;
+    let found = true;
     if (!openSearchForm.value) {
-        error = searchOne();
+        found = searchOne();
     } else {
         if (
             form.value.testament != undefined &&
@@ -109,32 +108,26 @@ const search = () => {
             }
             bibleStore.saveSearch();
         } else {
-            error = true;
+            found = false;
         }
     }
 
-    if (!error) {
-        let name = 'bible.book';
-        if (typeof bibleStore.verses == 'number') {
-            name = 'bible.verse';
-        }
-        if (route.name !== name) {
-            router.push({ name });
-        }
+    if (found) {
+        router.push({ name: 'bible.book', query: {colored: 1} });
     }
 };
 
 const searchOne = () => {
     const result = api.search(bibleStore.$state, bookSearch.value);
     if (!result) {
-        return true;
+        return false;
     }
     bibleStore.setTestament(result.testament);
     bibleStore.setBook(result.book);
     bibleStore.setChapter(result.chapter);
     bibleStore.setVerses(result.verses);
     bibleStore.saveSearch();
-    return false;
+    return true;
 };
 
 const chapters = computed((): ChapterT[] => {

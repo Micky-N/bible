@@ -94,7 +94,10 @@ export default class Bible {
                 .verses;
         if (typeof verses == 'string') {
             if (verses == '*') {
-                return allVerses;
+                return allVerses.map((verse, index) => {
+                    verse.id = index;
+                    return verse
+                });
             } else {
                 if (verses.includes('-')) {
                     const versesSplit = verses
