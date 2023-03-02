@@ -40,3 +40,7 @@ export declare function search(
     state: BibleStoreT,
     searchText: string
 ): LastSearchBibleT | false;
+
+export declare function getAllVersionsVerse(state: BibleStoreT): {
+    [key: string]: VerseT & { version_guid: string };
+};

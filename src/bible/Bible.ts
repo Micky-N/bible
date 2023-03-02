@@ -25,7 +25,7 @@ export default class Bible {
         this.extension = '.json';
     }
 
-    fromState(state: BibleStoreT): Bible {
+    fromState(state: { language: string; version: string }): Bible {
         this.language = state.language;
         this.currentVersion = state.version;
         return this;
@@ -317,5 +317,45 @@ export default class Bible {
         }
         result.verses = verses;
         return false;
+    }
+
+    getAllVersionsVerse({
+        testament,
+        book,
+        chapter,
+        verses,
+    }: {
+        testament: number;
+        book: number;
+        chapter: number;
+        verses: number;
+    }): {
+        [key: string]: VerseT & { version_guid: string };
+    } {
+        const versions = this.getVersions().filter(
+            (version) => version.guid != this.currentVersion
+        );
+        const versionsVerse = {};
+        versions.forEach((version) => {
+            const bibleInstance = this.fromState({
+                language: this.language,
+                version: version.guid,
+            });
+            const foundedVerses = bibleInstance.getVerses({
+                testament,
+                book,
+                chapter,
+                verses,
+            });
+            if (foundedVerses.length) {
+                const verseToAdd = foundedVerses[0] as VerseT & {
+                    version_guid: string;
+                };
+                verseToAdd.version_guid = version.guid;
+                verseToAdd.id = verses;
+                versionsVerse[version.description] = verseToAdd;
+            }
+        });
+        return versionsVerse;
     }
 }

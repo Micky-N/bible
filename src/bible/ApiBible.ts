@@ -78,6 +78,12 @@ export const search = (
     return ipcRenderer.sendSync('search', getInstance(state), searchText);
 };
 
+export const getAllVersionsVerse = (
+    state: BibleStoreT
+): { [key: string]: VerseT & { version_guid: string } } => {
+    return ipcRenderer.sendSync('allVersionsVerse', getInstance(state));
+};
+
 export default {
     getTestaments,
     getBooks,
@@ -89,4 +95,5 @@ export default {
     getVersions,
     autoCompleteBooks,
     search,
+    getAllVersionsVerse,
 };

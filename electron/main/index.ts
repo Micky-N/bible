@@ -172,6 +172,15 @@ ipcMain.on('search', (event, state: BibleStoreT, searchText: string) => {
     event.returnValue = new Bible().fromState(state).search(searchText);
 });
 
+ipcMain.on(
+    'allVersionsVerse',
+    (event, state: BibleStoreT & { verses: number }) => {
+        event.returnValue = new Bible()
+            .fromState(state)
+            .getAllVersionsVerse(state);
+    }
+);
+
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);
 });
