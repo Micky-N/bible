@@ -14,7 +14,7 @@
     <chapter-nav
         @select-chapter="selectChapter"
         :current-chapter="chapter"
-        :chapters="chapters"
+        :chapters="book.chapters"
     />
     <chapter :chapter="currentChapter" />
 </template>
@@ -47,10 +47,6 @@ const selectChapter = (selectedChapter: number) => {
 };
 
 const currentChapter = computed(() => book.value.chapters[chapter.value]);
-
-const chapters = computed(() => {
-    return Array.from(Object.keys(book.value.chapters).keys());
-});
 </script>
 
 <style></style>

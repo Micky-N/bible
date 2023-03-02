@@ -1,11 +1,10 @@
 <template>
     <div>
         <verse
-            :index="verse.id || index"
-            :verse="verse.value"
-            v-for="(verse, index) in verses"
-            :key="verse.id || index"
-            :colored="verseColored(verse)"
+            :verse="verse"
+            v-for="verse in verses"
+            :key="verse.id"
+            :colored="verseColored(verse.id)"
         />
     </div>
 </template>
@@ -17,26 +16,27 @@ import { useBibleStore } from '../../../store/BibleStore';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const props = defineProps<{
+defineProps<{
     verses: VerseT[];
 }>();
 
 const bs = useBibleStore();
 
-const verseColored = (verse: VerseT) => {
+const verseColored = (idVerse: number) => {
     const verses = bs.verses;
     if (route.query.colored) {
         if (typeof verses == 'number') {
-            return verses == verse.id;
+            return verses == idVerse;
         } else {
             const splittedVerses = verses.split('-').map((n) => parseInt(n));
             const allVerses = [];
             for (let i = splittedVerses[0]; i <= splittedVerses[1]; i++) {
                 allVerses.push(i);
             }
-            return allVerses.includes(verse.id!);
+            return allVerses.includes(idVerse!);
         }
     }
+    return false;
 };
 </script>
 

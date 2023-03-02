@@ -11,35 +11,35 @@
             <select v-model="form.chapter">
                 <option
                     selected
-                    :value="index"
-                    v-for="(chapter, index) in chapters"
-                    :key="index"
+                    :value="chapter.id"
+                    v-for="chapter in chapters"
+                    :key="chapter.id"
                 >
-                    {{ index + 1 }}
+                    {{ chapter.id + 1 }}
                 </option>
             </select>
             <select v-model="form.verses.from">
                 <option
                     selected
-                    :value="index"
-                    v-for="(verse, index) in verses"
-                    :key="index"
+                    :value="verse.id"
+                    v-for="verse in verses"
+                    :key="verse.id"
                 >
-                    {{ index + 1 }}
+                    {{ verse.id + 1 }}
                 </option>
             </select>
             <select v-model="form.verses.to">
                 <option :value="777"></option>
-                <template v-for="(verse, index) in verses" :key="index">
+                <template v-for="verse in verses" :key="verse.id">
                     <option
                         v-if="
                             form.verses &&
                             form.verses.from != undefined &&
-                            index > form.verses.from
+                            verse.id > form.verses.from
                         "
-                        :value="index"
+                        :value="verse.id"
                     >
-                        {{ index + 1 }}
+                        {{ verse.id + 1 }}
                     </option>
                 </template>
             </select>
@@ -58,7 +58,7 @@ import {
 import { computed, inject, ref, watch } from 'vue';
 import { useBibleStore } from '../../../store/BibleStore';
 import AutoComplete from '@/components/Bible/Search/AutoComplete.vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const bookSearch = ref('');
 const openSearchForm = ref(false);
@@ -113,7 +113,14 @@ const search = () => {
     }
 
     if (found) {
-        router.push({ name: 'bible.book', query: { colored: 1 } });
+        let routeParam: { name: string; query?: {} } = {
+            name: 'bible.book',
+            query: { colored: 1 },
+        };
+        if (typeof bibleStore.verses == 'number') {
+            routeParam = { name: 'bible.verse' };
+        }
+        router.push(routeParam);
     }
 };
 
@@ -165,8 +172,8 @@ watch(bookSearch, () => {
     const bookObject = api
         .getAllBooks(bibleStore.$state)
         .find(
-            (b: { idTestament: number; idBook: number; book: string }) =>
-                b.book == bookSearch.value
+            (b: { idTestament: number; book: { value: string; id: number } }) =>
+                b.book.value == bookSearch.value
         ) as { idTestament: number; idBook: number; book: string } | undefined;
     if (bookObject !== undefined) {
         form.value.testament = bookObject.idTestament;

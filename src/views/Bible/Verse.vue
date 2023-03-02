@@ -20,16 +20,15 @@
             :colored="verse == v.id"
             v-for="v in versesPN(verse)"
             :key="v.id"
-            :verse="v.value"
-            :index="v.id"
+            :verse="v"
         />
         <version-verses
             @click="goToVersion(guid)"
             v-for="(verse, guid) in allVersionsVerse"
             :key="guid"
-            :verses="versesPN(verse.id!)"
+            :verses="versesPN(verse.id)"
             :version_description="verse.version_description"
-            :current-verse="verse.id!"
+            :current-verse="verse.id"
         />
     </div>
 </template>
@@ -40,7 +39,7 @@ import Verse from '@/components/Bible/Book/Verse.vue';
 import VersionVerses from '@/components/Bible/Verse/VersionVerses.vue';
 import { computed, inject } from 'vue';
 import { useBibleStore } from '../../store/BibleStore';
-import { ApiBibleT, VerseT } from '../../types/Bible';
+import { ApiBibleT } from '../../types/Bible';
 
 const apiBible = inject('ApiBible') as ApiBibleT;
 const bstore = useBibleStore();
@@ -78,7 +77,7 @@ const goToNext = () => {
     let chapter = bstore.chapter;
     let book = bstore.book;
     let testament = bstore.testament;
-    let i = verse.value! + 1;
+    let i = verse.value + 1;
     if (i >= versesLength.value) {
         chapter += 1;
         i = 0;
@@ -104,7 +103,7 @@ const goToPrevious = () => {
     let chapter = bstore.chapter;
     let book = bstore.book;
     let testament = bstore.testament;
-    let i = verse.value! - 1;
+    let i = verse.value - 1;
     if (i < 0) {
         chapter -= 1;
     }
@@ -116,7 +115,7 @@ const goToPrevious = () => {
     }
 
     if (testament < 0) {
-        bstore.setTestament(0);
+        bstore.setTestament(1);
     } else {
         bstore.setTestament(testament);
     }

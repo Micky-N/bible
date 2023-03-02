@@ -1,19 +1,22 @@
 <template>
     <ul>
         <li
-            @click="$emit('select-testament', index)"
-            v-for="(testament, index) in testaments"
-            :key="index"
+            @click="$emit('select-testament', testament.id)"
+            v-for="testament in testaments"
+            :key="testament.id"
         >
-            {{ testament }}
+            {{ testament.value }}
         </li>
     </ul>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
     currentTestament: number;
-    testaments: string[];
+    testaments: {
+        value: string;
+        id: number;
+    }[];
 }>();
 </script>
 

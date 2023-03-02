@@ -3,6 +3,7 @@ import {
     BibleStoreT,
     BookT,
     ChapterT,
+    DefaultT,
     LastSearchBibleT,
     VerseT,
     VersionT,
@@ -10,7 +11,7 @@ import {
 
 declare function getInstance(state: BibleStoreT): BibleStoreT;
 
-export declare function getTestaments(state: BibleStoreT): string[];
+export declare function getTestaments(state: BibleStoreT): DefaultT[];
 
 export declare function getVerses(state: BibleStoreT): VerseT[];
 
@@ -21,9 +22,11 @@ export declare function getChapter(
     idChapter: number
 ): ChapterT;
 
-export declare function getBooks(state: BibleStoreT): string[];
+export declare function getBooks(state: BibleStoreT): DefaultT[];
 
-export declare function getAllBooks(state: BibleStoreT): [];
+export declare function getAllBooks(
+    state: BibleStoreT
+): { idTestament: number; book: DefaultT }[];
 
 export declare function getBook(state: BibleStoreT): BookT;
 

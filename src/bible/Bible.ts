@@ -1,9 +1,8 @@
 import path from 'node:path';
 import {
     AllBooksT,
-    AutoCompleteT,
-    BibleStoreT,
     BibleT,
+    DefaultT,
     LastSearchBibleT,
     VerseT,
     VersionT,
@@ -40,27 +39,31 @@ export default class Bible {
         return require(bible);
     }
 
-    getTestaments(): string[] {
-        return this.getBible().testaments.map((testament) => testament.value);
+    getTestaments(): DefaultT[] {
+        return this.getBible().testaments.map((testament) => {
+            return { value: testament.value, id: testament.id };
+        });
     }
 
-    getTestament(idTestament: number): string {
-        return this.getBible().testaments[idTestament].value;
+    getTestament(idTestament: number): DefaultT {
+        return this.getTestaments().find(
+            (testament) => testament.id == idTestament
+        );
     }
 
     getBooks(idTestament: number) {
-        return this.getBible().testaments[idTestament].books.map(
-            (book) => book.value
-        );
+        return this.getBible().testaments[idTestament].books.map((book) => ({
+            value: book.value,
+            id: book.id,
+        }));
     }
 
     getAllBooks(): AllBooksT {
         const books = [];
         this.getBible().testaments.forEach((testament, idTestament) => {
-            this.getBooks(idTestament).forEach((book, idBook) => {
+            this.getBooks(idTestament).forEach((book) => {
                 books.push({
                     idTestament,
-                    idBook,
                     book,
                 });
             });
@@ -94,43 +97,24 @@ export default class Bible {
                 .verses;
         if (typeof verses == 'string') {
             if (verses == '*') {
-                return allVerses.map((verse, index) => {
-                    verse.id = index;
-                    return verse;
-                });
+                return allVerses;
             } else {
                 if (verses.includes('-')) {
                     const versesSplit = verses
                         .split('-')
                         .map((verse) => parseInt(verse));
-                    return allVerses.filter((verse, index) => {
-                        verse.id = index;
-                        const isValid =
-                            versesSplit[0] <= index && index <= versesSplit[1];
-                        if (isValid) {
-                            verse.id = index;
-                        }
-                        return isValid;
-                    });
+                    return allVerses.filter(
+                        (verse) =>
+                            versesSplit[0] <= verse.id &&
+                            verse.id <= versesSplit[1]
+                    );
                 } else {
                     const versesSplit = parseInt(verses);
-                    return allVerses.filter((verse, index) => {
-                        const isValid = versesSplit == index;
-                        if (isValid) {
-                            verse.id = index;
-                        }
-                        return isValid;
-                    });
+                    return allVerses.filter((verse) => versesSplit == verse.id);
                 }
             }
         } else if (typeof verses == 'number') {
-            return allVerses.filter((verse, index) => {
-                const isValid = verses == index;
-                if (isValid) {
-                    verse.id = index;
-                }
-                return isValid;
-            });
+            return allVerses.filter((verse) => verses == verse.id);
         }
         return allVerses;
     }
@@ -144,7 +128,7 @@ export default class Bible {
             __dirname,
             '../../src/bible/versions.json'
         ));
-        return versions.find((vs) => vs.guid == this.currentVersion);
+        return versions.find((version) => version.guid == this.currentVersion);
     }
 
     getAutoCompleteBooks(searchValue: string): string[] {
@@ -153,9 +137,9 @@ export default class Bible {
             this.getBooks(idTestament).forEach((book) => {
                 if (
                     searchValue.length >= 3 &&
-                    this.matchBook(book, searchValue)
+                    this.matchBook(book.value, searchValue)
                 ) {
-                    matchedBooks.push(book);
+                    matchedBooks.push(book.value);
                 }
             });
         });
@@ -241,7 +225,7 @@ export default class Bible {
         const books: AllBooksT = [];
         const allBooks = this.getAllBooks();
         allBooks.forEach((b) => {
-            if (this.matchBook(b.book, bookName)) {
+            if (this.matchBook(b.book.value, bookName)) {
                 books.push(b);
             }
         });
@@ -249,7 +233,7 @@ export default class Bible {
             return true;
         }
         result.testament = books[0].idTestament;
-        result.book = books[0].idBook;
+        result.book = books[0].book.id;
         return false;
     }
 
@@ -355,7 +339,6 @@ export default class Bible {
                     version_description: string;
                 };
                 verseToAdd.version_description = version.description;
-                verseToAdd.id = verses;
                 versionsVerse[version.guid] = verseToAdd;
             }
         });

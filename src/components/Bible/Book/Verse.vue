@@ -1,31 +1,26 @@
 <template>
-    <span :class="{ colored: colored }">
-        <sup @click="showVerse()">{{ id + 1 }}</sup
-        >{{ verse + ' ' }}
+    <span :class="{ colored }">
+        <sup @click="showVerse()">{{ verse.id + 1 }}</sup
+        >{{ verse.value + ' ' }}
     </span>
 </template>
 
 <script setup lang="ts">
 import { useBibleStore } from '../../../store/BibleStore';
 import { useRouter } from 'vue-router';
-import { computed } from 'vue';
+import { VerseT } from '../../../types/Bible';
 
 const props = defineProps<{
-    verse: string;
-    index: number | string;
+    verse: VerseT;
     colored: boolean | false;
 }>();
 
 const r = useRouter();
 
 const showVerse = () => {
-    useBibleStore().verses = props.index;
+    useBibleStore().verses = props.verse.id;
     r.push({ name: 'bible.verse' });
 };
-
-const id = computed(() => {
-    return typeof props.index == 'string' ? 0 : props.index;
-});
 </script>
 
 <style scoped>

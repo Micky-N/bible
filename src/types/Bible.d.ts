@@ -1,26 +1,24 @@
 import ApiBible from '../bible/ApiBible';
+export type DefaultT = { value: string; id: number };
+
 export type BibleT = {
     testaments: TestamentT[];
 };
 
-export type BookT = {
-    value: string;
+export type BookT = DefaultT & {
     chapters: ChapterT[];
 };
 
 export type ChapterT = {
     verses: VerseT[];
+    id: number;
 };
 
-export type TestamentT = {
-    value: string;
+export type TestamentT = DefaultT & {
     books: BookT[];
 };
 
-export type VerseT = {
-    value: string;
-    id?: number;
-};
+export type VerseT = DefaultT;
 
 export type VersionT = {
     abbreviation: string;
@@ -51,6 +49,5 @@ export type AutoCompleteT = {
 
 export type AllBooksT = Array<{
     idTestament: number;
-    idBook: number;
-    book: string;
+    book: { value: string; id: number };
 }>;

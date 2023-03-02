@@ -3,6 +3,7 @@ import {
     BibleStoreT,
     BookT,
     ChapterT,
+    DefaultT,
     LastSearchBibleT,
     VerseT,
     VersionT,
@@ -18,8 +19,8 @@ const getInstance = (state: BibleStoreT): BibleStoreT => {
         verses: state.verses,
     };
 };
-export const getTestaments = (state: BibleStoreT): string[] => {
-    return ipcRenderer.sendSync('testaments', getInstance(state)) as string[];
+export const getTestaments = (state: BibleStoreT): DefaultT[] => {
+    return ipcRenderer.sendSync('testaments', getInstance(state));
 };
 
 export const getVerses = (state: BibleStoreT): VerseT[] => {
@@ -43,11 +44,13 @@ export const getChapter = (
 
 export const getAllBooks = (
     state: BibleStoreT
-): { idTestament: number; idBook: number; book: string }[] => {
+): { idTestament: number; book: DefaultT }[] => {
     return ipcRenderer.sendSync('allBooks', getInstance(state));
 };
 
-export const getBooks = (state: BibleStoreT): string[] => {
+export const getBooks = (
+    state: BibleStoreT
+): { value: string; id: number }[] => {
     return ipcRenderer.sendSync('books', getInstance(state));
 };
 

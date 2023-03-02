@@ -3,7 +3,7 @@
         <last-search-button />
         <aside>
             <search-bar />
-            {{ currentTestament }} - {{ currentBook }}
+            {{ currentTestament.value }} - {{ currentBook.value }}
             <router-link
                 :to="{
                     name: 'bible.book',
