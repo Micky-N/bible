@@ -1,13 +1,28 @@
 <template>
     <div>
         <search-bar />
-        <h5>{{ book +' '+ (chapter + 1)+': '+(verse + 1) }} - {{ version.description }}</h5>
+        <h5>
+            {{ book + ' ' + (chapter + 1) + ': ' + (verse + 1) }} -
+            {{ version.description }}
+        </h5>
         <div>
             <button @click="goToPrevious">-</button>
-            <button @click="$router.push({name: 'bible.book', query: {colored: 1}})">Voir dans la bible</button>
+            <button
+                @click="
+                    $router.push({ name: 'bible.book', query: { colored: 1 } })
+                "
+            >
+                Voir dans la bible
+            </button>
             <button @click="goToNext">+</button>
         </div>
-        <verse :colored="verse == v.id" v-for="v in versesPN(verse)" :key="v.id" :verse="v.value" :index="v.id" />
+        <verse
+            :colored="verse == v.id"
+            v-for="v in versesPN(verse)"
+            :key="v.id"
+            :verse="v.value"
+            :index="v.id"
+        />
         <version-verses
             @click="goToVersion(guid)"
             v-for="(verse, guid) in allVersionsVerse"
@@ -34,11 +49,11 @@ const book = computed(() => apiBible.getBook(bstore.$state).value);
 const chapter = computed(() => bstore.chapter);
 
 const versesPN = (verse: number) => {
-    const prev = verse == 0 ? 0 : verse-1
-    const next = verse >= versesLength.value ? undefined : verse+1
-    const joinVerses = [prev, next].filter(n => n != undefined).join('-')
-    return apiBible.getVerses({...bstore.$state, verses: joinVerses})
-}
+    const prev = verse == 0 ? 0 : verse - 1;
+    const next = verse >= versesLength.value ? undefined : verse + 1;
+    const joinVerses = [prev, next].filter((n) => n != undefined).join('-');
+    return apiBible.getVerses({ ...bstore.$state, verses: joinVerses });
+};
 const versesLength = computed(
     () =>
         apiBible.getChapter(
@@ -55,13 +70,15 @@ const chaptersLength = computed(
 
 const booksLength = computed(() => apiBible.getBooks(bstore.$state).length);
 
-const testamentsLength = computed(() => apiBible.getTestaments(bstore.$state).length);
+const testamentsLength = computed(
+    () => apiBible.getTestaments(bstore.$state).length
+);
 
 const goToNext = () => {
     let chapter = bstore.chapter;
     let book = bstore.book;
     let testament = bstore.testament;
-    let i = verse.value! + 1
+    let i = verse.value! + 1;
     if (i >= versesLength.value) {
         chapter += 1;
         i = 0;
@@ -87,7 +104,7 @@ const goToPrevious = () => {
     let chapter = bstore.chapter;
     let book = bstore.book;
     let testament = bstore.testament;
-    let i = verse.value! - 1
+    let i = verse.value! - 1;
     if (i < 0) {
         chapter -= 1;
     }
@@ -100,22 +117,22 @@ const goToPrevious = () => {
 
     if (testament < 0) {
         bstore.setTestament(0);
-    }else{
+    } else {
         bstore.setTestament(testament);
     }
     if (book < 0) {
         bstore.setBook(booksLength.value - 1);
-    }else{
+    } else {
         bstore.setBook(book);
     }
-    if(chapter < 0){
+    if (chapter < 0) {
         bstore.setChapter(chaptersLength.value - 1);
-    }else{
+    } else {
         bstore.setChapter(chapter);
     }
-    if(i < 0){
+    if (i < 0) {
         bstore.setVerses(versesLength.value - 1);
-    }else{
+    } else {
         bstore.setVerses(i);
     }
 };

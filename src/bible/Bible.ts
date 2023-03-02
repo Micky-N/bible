@@ -96,7 +96,7 @@ export default class Bible {
             if (verses == '*') {
                 return allVerses.map((verse, index) => {
                     verse.id = index;
-                    return verse
+                    return verse;
                 });
             } else {
                 if (verses.includes('-')) {

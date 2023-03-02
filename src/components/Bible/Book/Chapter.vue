@@ -14,10 +14,12 @@ const props = defineProps<{
     chapter: ChapterT;
 }>();
 const apiBible = inject('ApiBible') as ApiBibleT;
-const verses = computed(() => props.chapter.verses.map((v, index) => {
-    v.id = index;
-    return v;
-}));
+const verses = computed(() =>
+    props.chapter.verses.map((v, index) => {
+        v.id = index;
+        return v;
+    })
+);
 </script>
 
 <style></style>

@@ -1,8 +1,4 @@
-import {
-    createRouter,
-    createWebHistory,
-    RouteRecordRaw,
-} from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import BibleIndex from '../views/Bible/Index.vue';
 import BibleBook from '../views/Bible/Book.vue';
 import BibleVerse from '../views/Bible/Verse.vue';

@@ -29,12 +29,12 @@ const verseColored = (verse: VerseT) => {
         if (typeof verses == 'number') {
             return verses == verse.id;
         } else {
-            const splittedVerses = verses.split('-').map(n => parseInt(n));
-            const allVerses = []
+            const splittedVerses = verses.split('-').map((n) => parseInt(n));
+            const allVerses = [];
             for (let i = splittedVerses[0]; i <= splittedVerses[1]; i++) {
                 allVerses.push(i);
             }
-            return allVerses.includes(verse.id!)
+            return allVerses.includes(verse.id!);
         }
     }
 };

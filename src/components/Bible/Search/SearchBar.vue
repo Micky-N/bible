@@ -113,7 +113,7 @@ const search = () => {
     }
 
     if (found) {
-        router.push({ name: 'bible.book', query: {colored: 1} });
+        router.push({ name: 'bible.book', query: { colored: 1 } });
     }
 };
 

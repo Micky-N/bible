@@ -1,5 +1,5 @@
 <template>
-    <span :class="{'colored': colored}">
+    <span :class="{ colored: colored }">
         <sup @click="showVerse()">{{ id + 1 }}</sup
         >{{ verse + ' ' }}
     </span>
@@ -13,7 +13,7 @@ import { computed } from 'vue';
 const props = defineProps<{
     verse: string;
     index: number | string;
-    colored: boolean | false
+    colored: boolean | false;
 }>();
 
 const r = useRouter();
@@ -24,8 +24,8 @@ const showVerse = () => {
 };
 
 const id = computed(() => {
-    return typeof props.index == 'string' ? 0 : props.index
-})
+    return typeof props.index == 'string' ? 0 : props.index;
+});
 </script>
 
 <style scoped>
