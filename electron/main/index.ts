@@ -70,6 +70,12 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
+app.on('will-quit', function () {
+    // This is a good place to add tests insuring the app is still
+    // responsive and all windows are closed.
+    console.log('will-quit');
+});
+
 app.on('ready', () => {
     let installExtension = require('electron-devtools-installer');
     installExtension
@@ -95,6 +101,10 @@ app.on('activate', () => {
     } else {
         createWindow();
     }
+});
+
+ipcMain.on('electron-store-get-data', (event, data) => {
+    console.log(data);
 });
 
 // New window example arg: new windows url

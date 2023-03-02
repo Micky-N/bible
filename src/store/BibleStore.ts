@@ -1,5 +1,28 @@
 import { defineStore } from 'pinia';
 import { BibleStoreT, LastSearchBibleT } from '../types/Bible';
+import EStore from '../utils/EStore';
+
+const eStore = new EStore('test');
+
+const eStoreStorage: Storage = {
+    length: 1,
+    setItem(key, state) {
+        eStore.set(key, state);
+    },
+    getItem(key) {
+        console.log(key);
+        return JSON.stringify(eStore.get(key));
+    },
+    clear(): void {
+        throw new Error('Function not implemented.');
+    },
+    key(index: number): string | null {
+        throw new Error('Function not implemented.');
+    },
+    removeItem(key: string): void {
+        throw new Error('Function not implemented.');
+    },
+};
 
 export const useBibleStore = defineStore('bibleStore', {
     state: (): BibleStoreT => ({
@@ -11,6 +34,22 @@ export const useBibleStore = defineStore('bibleStore', {
         verses: '*',
         lastSearch: undefined,
     }),
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: eStoreStorage,
+                paths: [
+                    'language',
+                    'version',
+                    'testament',
+                    'book',
+                    'chapter',
+                    'verses',
+                ],
+            },
+        ],
+    },
     actions: {
         setLanguage(language: string) {
             this.language = language;
