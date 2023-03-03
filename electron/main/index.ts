@@ -103,10 +103,6 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('electron-store-get-data', (event, data) => {
-    console.log(data);
-});
-
 // New window example arg: new windows url
 ipcMain.handle('open-win', (_, arg) => {
     const childWindow = new BrowserWindow({
@@ -122,6 +118,14 @@ ipcMain.handle('open-win', (_, arg) => {
     } else {
         childWindow.loadFile(indexHtml, { hash: arg });
     }
+});
+
+ipcMain.on('electronStoreSet', (event, key, state) => {
+    event.returnValue = new Bible().setState(key, state);
+});
+
+ipcMain.on('electronStoreGet', (event, key) => {
+    event.returnValue = new Bible().getState(key);
 });
 
 ipcMain.on('testaments', (event, state: BibleStoreT) => {

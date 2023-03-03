@@ -47,3 +47,7 @@ export declare function search(
 export declare function getAllVersionsVerse(state: BibleStoreT): {
     [version_guid: string]: VerseT & { version_description: string };
 };
+
+export declare function setState(key: string, state: string): boolean;
+
+export declare function getState(key: string): string | false;

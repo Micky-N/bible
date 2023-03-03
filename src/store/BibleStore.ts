@@ -1,17 +1,14 @@
 import { defineStore } from 'pinia';
 import { BibleStoreT, LastSearchBibleT } from '../types/Bible';
-import EStore from '../utils/EStore';
-
-const eStore = new EStore('test');
+import ApiBible from '../bible/ApiBible';
 
 const eStoreStorage: Storage = {
     length: 1,
-    setItem(key, state) {
-        eStore.set(key, state);
+    setItem(key: string, state: string): boolean {
+        return ApiBible.setState(key, state);
     },
-    getItem(key) {
-        console.log(key);
-        return JSON.stringify(eStore.get(key));
+    getItem(key: string): string {
+        return ApiBible.getState(key) || '';
     },
     clear(): void {
         throw new Error('Function not implemented.');

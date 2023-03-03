@@ -87,6 +87,14 @@ export const getAllVersionsVerse = (
     return ipcRenderer.sendSync('allVersionsVerse', getInstance(state));
 };
 
+export const setState = (key: string, state: string): boolean => {
+    return ipcRenderer.sendSync('electronStoreSet', key, state);
+};
+
+export const getState = (key: string): string | false => {
+    return ipcRenderer.sendSync('electronStoreGet', key);
+};
+
 export default {
     getTestaments,
     getBooks,
@@ -99,4 +107,6 @@ export default {
     autoCompleteBooks,
     search,
     getAllVersionsVerse,
+    setState,
+    getState,
 };

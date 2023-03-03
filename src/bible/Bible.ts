@@ -7,6 +7,7 @@ import {
     VerseT,
     VersionT,
 } from '../types/Bible';
+import EStore from '../utils/EStore';
 
 export default class Bible {
     private extension: string;
@@ -343,5 +344,24 @@ export default class Bible {
             }
         });
         return versionsVerse;
+    }
+
+    setState(key: string, state: string): boolean {
+        try {
+            const eStore = new EStore('test');
+            eStore.set(key, state);
+        } catch (error) {
+            return false;
+        }
+        return true;
+    }
+
+    getState(key: string): string | false {
+        try {
+            const eStore = new EStore('test');
+            return eStore.get(key) as string;
+        } catch (error) {
+            return false;
+        }
     }
 }
