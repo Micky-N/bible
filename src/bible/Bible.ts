@@ -122,13 +122,13 @@ export default class Bible {
     }
 
     getVersions(): VersionT[] {
-        return require(path.join(__dirname, '../../src/bible/versions.json'));
+        return require(path.join(__dirname, '../../src/bible/lib/versions.json'));
     }
 
     getVersion(): VersionT {
         const versions: VersionT[] = require(path.join(
             __dirname,
-            '../../src/bible/versions.json'
+            '../../src/bible/lib/versions.json'
         ));
         return versions.find((version) => version.guid == this.currentVersion);
     }
