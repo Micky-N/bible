@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import { BibleStoreT, LastSearchBibleT } from '../types/Bible';
+import { BibleStoreT, SearchBibleT } from '../types/Bible';
 import ApiBible from '../bible/ApiBible';
+import { DateTime } from 'luxon';
 
 const eStoreStorage: Storage = {
     length: 1,
@@ -22,15 +23,16 @@ const eStoreStorage: Storage = {
 };
 
 export const useBibleStore = defineStore('bibleStore', {
-    state: (): BibleStoreT => ({
-        language: 'fr',
-        version: 'YifIs3pOjkCNRDJgFahinQ',
-        testament: 0,
-        book: 0,
-        chapter: 0,
-        verses: '*',
-        lastSearch: undefined,
-    }),
+    state: () =>
+        ({
+            language: 'fr',
+            version: 'YifIs3pOjkCNRDJgFahinQ',
+            testament: 0,
+            book: 0,
+            chapter: 0,
+            verses: '*',
+            lastSearchTime: undefined,
+        } as BibleStoreT),
     persist: {
         enabled: true,
         strategies: [
@@ -43,6 +45,7 @@ export const useBibleStore = defineStore('bibleStore', {
                     'book',
                     'chapter',
                     'verses',
+                    'lastSearchTime',
                 ],
             },
         ],
@@ -69,15 +72,11 @@ export const useBibleStore = defineStore('bibleStore', {
         setVerses(verses: string | number) {
             this.verses = verses;
         },
-        setLastSearch(lastSearch?: LastSearchBibleT) {
-            this.lastSearch = lastSearch;
+        setLastSearchTime(lastSearchTime?: number) {
+            this.lastSearchTime = lastSearchTime || DateTime.now().toMillis();
         },
-        saveSearch() {
-            const { testament, book, chapter, verses } = this.$state;
-            this.lastSearch = { testament, book, chapter, verses };
-        },
-        goToLastSearch() {
-            this.$state = { ...this.$state, ...this.$state.lastSearch };
+        setSearchData(searchData: SearchBibleT) {
+            this.$state = { ...this.$state, ...searchData };
         },
     },
 });

@@ -123,14 +123,14 @@ ipcMain.handle('open-win', (_, arg) => {
 ipcMain.on(
     'electronStoreSet',
     (event, key: string, state: string, classUse: string) => {
-        if (classUse == 'Blble') {
+        if (classUse == 'Bible') {
             event.returnValue = new Bible().setState(key, state);
         }
     }
 );
 
 ipcMain.on('electronStoreGet', (event, key: string, classUse: string) => {
-    if (classUse == 'Blble') {
+    if (classUse == 'Bible') {
         event.returnValue = new Bible().getState(key);
     }
 });

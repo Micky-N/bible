@@ -27,13 +27,13 @@ export type VersionT = {
     guid: string;
 };
 
-export type BibleStoreT = LastSearchBibleT & {
+export type BibleStoreT = SearchBibleT & {
     language: string;
     version: string;
-    lastSearch?: LastSearchBibleT;
+    lastSearchTime?: number;
 };
 
-export type LastSearchBibleT = {
+export type SearchBibleT = {
     testament: number;
     book: number;
     chapter: number;

@@ -4,7 +4,7 @@ import {
     BookT,
     ChapterT,
     DefaultT,
-    LastSearchBibleT,
+    SearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
@@ -44,7 +44,7 @@ export declare function autoCompleteBooks(
 export declare function search(
     state: BibleStoreT,
     searchText: string
-): LastSearchBibleT | false;
+): SearchBibleT | false;
 
 export declare function getAllVersionsVerse(state: BibleStoreT): {
     [version_guid: string]: VerseT & { version_description: string };
@@ -54,8 +54,8 @@ export declare function setState(key: string, state: string): boolean;
 
 export declare function getState(key: string): string | false;
 
-export declare function saveSearch(searchCriteria: LastSearchBibleT): boolean;
+export declare function saveSearch(searchCriteria: SearchBibleT): boolean;
 
-export declare function getSearches(): LastSearchBibleT[] | false;
+export declare function getSearches(): SearchBibleT[] | false;
 
-export declare function getSearch(searchDate: number): LastSearchBibleT | false;
+export declare function getSearch(searchDate: number): SearchBibleT | false;

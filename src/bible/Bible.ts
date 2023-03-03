@@ -3,7 +3,7 @@ import {
     AllBooksT,
     BibleT,
     DefaultT,
-    LastSearchBibleT,
+    SearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
@@ -159,7 +159,7 @@ export default class Bible {
         return false;
     }
 
-    search(searchText: string): LastSearchBibleT | false {
+    search(searchText: string): SearchBibleT | false {
         searchText = searchText
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
@@ -183,7 +183,7 @@ export default class Bible {
                 ? matches[6]
                 : parseInt(matches[6]);
         }
-        const result: LastSearchBibleT = {
+        const result: SearchBibleT = {
             testament: 0,
             book: 0,
             chapter: 0,
@@ -203,7 +203,7 @@ export default class Bible {
 
     private isValidSearch(
         { bookMatched, chapterMatched, versesMatched },
-        result: LastSearchBibleT
+        result: SearchBibleT
     ): boolean {
         let error = false;
         error = this.findBook(bookMatched, result);
@@ -223,7 +223,7 @@ export default class Bible {
         return true;
     }
 
-    private findBook(bookName: string, result: LastSearchBibleT) {
+    private findBook(bookName: string, result: SearchBibleT) {
         const books: AllBooksT = [];
         const allBooks = this.getAllBooks();
         allBooks.forEach((b) => {
@@ -239,7 +239,7 @@ export default class Bible {
         return false;
     }
 
-    private checkChapterMax(idChapter: number, result: LastSearchBibleT) {
+    private checkChapterMax(idChapter: number, result: SearchBibleT) {
         idChapter = idChapter - 1;
         const chaptersLength = this.getBook(result.testament, result.book)
             .chapters.length;
@@ -256,7 +256,7 @@ export default class Bible {
         return false;
     }
 
-    private checkVersesMax(verses: number | string, result: LastSearchBibleT) {
+    private checkVersesMax(verses: number | string, result: SearchBibleT) {
         if (typeof verses == 'string') {
             const versesSplit = verses.split('-').map((v) => parseInt(v) - 1);
             if (versesSplit[0] >= versesSplit[1]) {
@@ -352,6 +352,7 @@ export default class Bible {
             const eStore = new EStore(DB_NAME);
             eStore.set(key, state);
         } catch (error) {
+            console.error(error);
             return false;
         }
         return true;
@@ -362,6 +363,7 @@ export default class Bible {
             const eStore = new EStore(DB_NAME);
             return eStore.get(key) as string;
         } catch (error) {
+            console.error(error);
             return false;
         }
     }

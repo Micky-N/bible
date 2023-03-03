@@ -4,11 +4,10 @@ import {
     BookT,
     ChapterT,
     DefaultT,
-    LastSearchBibleT,
+    SearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
-import { DateTime } from 'luxon';
 
 const CLASS = 'Bible';
 
@@ -81,7 +80,7 @@ export const autoCompleteBooks = (state: BibleStoreT, searchValue: string) => {
 export const search = (
     state: BibleStoreT,
     searchText: string
-): LastSearchBibleT | false => {
+): SearchBibleT | false => {
     return ipcRenderer.sendSync('search', getInstance(state), searchText);
 };
 
@@ -99,26 +98,28 @@ export const getState = (key: string): string | false => {
     return ipcRenderer.sendSync('electronStoreGet', key, CLASS);
 };
 
-export const saveSearch = (searchCriteria: LastSearchBibleT) => {
-    const now = DateTime.now().toMillis();
+export const saveSearch = (state: BibleStoreT) => {
+    const time = state.lastSearchTime!;
+    const { testament, book, chapter, verses } = state;
     return ipcRenderer.sendSync(
         'electronStoreSet',
-        `searches.${now}`,
-        JSON.stringify(searchCriteria),
+        `searches.${time}`,
+        JSON.stringify({ testament, book, chapter, verses }),
         CLASS
     );
 };
 
-export const getSearches = (): LastSearchBibleT[] | false => {
+export const getSearches = (): SearchBibleT[] | false => {
     return ipcRenderer.sendSync('electronStoreGet', 'searches', CLASS);
 };
 
-export const getSearch = (searchDate: number): LastSearchBibleT | false => {
-    return ipcRenderer.sendSync(
+export const getSearch = (searchDate: number): SearchBibleT | false => {
+    const searchData: string | false = ipcRenderer.sendSync(
         'electronStoreGet',
         `searches.${searchDate}`,
         CLASS
     );
+    return searchData !== false ? JSON.parse(searchData) : searchData;
 };
 
 export default {

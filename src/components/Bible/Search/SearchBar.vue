@@ -106,7 +106,6 @@ const search = () => {
                         form.value.verses.to.toString()
                 );
             }
-            bibleStore.saveSearch();
         } else {
             found = false;
         }
@@ -120,12 +119,11 @@ const search = () => {
         if (typeof bibleStore.verses == 'number') {
             routeParam = { name: 'bible.verse' };
         }
-        api.saveSearch(bibleStore.lastSearch!);
+        bibleStore.setLastSearchTime();
+        api.saveSearch(bibleStore);
         router.push(routeParam);
     }
 };
-
-console.log(api.getSearches());
 
 const searchOne = () => {
     const result = api.search(bibleStore.$state, bookSearch.value);
@@ -136,7 +134,6 @@ const searchOne = () => {
     bibleStore.setBook(result.book);
     bibleStore.setChapter(result.chapter);
     bibleStore.setVerses(result.verses);
-    bibleStore.saveSearch();
     return true;
 };
 
