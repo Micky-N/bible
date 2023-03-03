@@ -1,5 +1,7 @@
 <template>
-    <button v-if="bS.lastSearchTime" @click="goToLastSearch">Last Search</button>
+    <button v-if="bS.lastSearchTime" @click="goToLastSearch">
+        Last Search
+    </button>
 </template>
 
 <script setup lang="ts">
