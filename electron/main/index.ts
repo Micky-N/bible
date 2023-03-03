@@ -120,12 +120,19 @@ ipcMain.handle('open-win', (_, arg) => {
     }
 });
 
-ipcMain.on('electronStoreSet', (event, key, state) => {
-    event.returnValue = new Bible().setState(key, state);
-});
+ipcMain.on(
+    'electronStoreSet',
+    (event, key: string, state: string, classUse: string) => {
+        if (classUse == 'Blble') {
+            event.returnValue = new Bible().setState(key, state);
+        }
+    }
+);
 
-ipcMain.on('electronStoreGet', (event, key) => {
-    event.returnValue = new Bible().getState(key);
+ipcMain.on('electronStoreGet', (event, key: string, classUse: string) => {
+    if (classUse == 'Blble') {
+        event.returnValue = new Bible().getState(key);
+    }
 });
 
 ipcMain.on('testaments', (event, state: BibleStoreT) => {

@@ -9,6 +9,8 @@ import {
     VersionT,
 } from '../types/Bible';
 
+declare const CLASS: string;
+
 declare function getInstance(state: BibleStoreT): BibleStoreT;
 
 export declare function getTestaments(state: BibleStoreT): DefaultT[];
@@ -51,3 +53,9 @@ export declare function getAllVersionsVerse(state: BibleStoreT): {
 export declare function setState(key: string, state: string): boolean;
 
 export declare function getState(key: string): string | false;
+
+export declare function saveSearch(searchCriteria: LastSearchBibleT): boolean;
+
+export declare function getSearches(): LastSearchBibleT[] | false;
+
+export declare function getSearch(searchDate: number): LastSearchBibleT | false;

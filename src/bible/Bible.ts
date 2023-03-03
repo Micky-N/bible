@@ -9,6 +9,7 @@ import {
 } from '../types/Bible';
 import EStore from '../utils/EStore';
 
+const DB_NAME = 'bibleDB';
 export default class Bible {
     private extension: string;
     private currentVersion: string;
@@ -348,7 +349,7 @@ export default class Bible {
 
     setState(key: string, state: string): boolean {
         try {
-            const eStore = new EStore('test');
+            const eStore = new EStore(DB_NAME);
             eStore.set(key, state);
         } catch (error) {
             return false;
@@ -358,7 +359,7 @@ export default class Bible {
 
     getState(key: string): string | false {
         try {
-            const eStore = new EStore('test');
+            const eStore = new EStore(DB_NAME);
             return eStore.get(key) as string;
         } catch (error) {
             return false;

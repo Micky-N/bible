@@ -8,6 +8,9 @@ import {
     VerseT,
     VersionT,
 } from '../types/Bible';
+import { DateTime } from 'luxon';
+
+const CLASS = 'Bible';
 
 const getInstance = (state: BibleStoreT): BibleStoreT => {
     return {
@@ -19,6 +22,7 @@ const getInstance = (state: BibleStoreT): BibleStoreT => {
         verses: state.verses,
     };
 };
+
 export const getTestaments = (state: BibleStoreT): DefaultT[] => {
     return ipcRenderer.sendSync('testaments', getInstance(state));
 };
@@ -88,11 +92,33 @@ export const getAllVersionsVerse = (
 };
 
 export const setState = (key: string, state: string): boolean => {
-    return ipcRenderer.sendSync('electronStoreSet', key, state);
+    return ipcRenderer.sendSync('electronStoreSet', key, state, CLASS);
 };
 
 export const getState = (key: string): string | false => {
-    return ipcRenderer.sendSync('electronStoreGet', key);
+    return ipcRenderer.sendSync('electronStoreGet', key, CLASS);
+};
+
+export const saveSearch = (searchCriteria: LastSearchBibleT) => {
+    const now = DateTime.now().toMillis();
+    return ipcRenderer.sendSync(
+        'electronStoreSet',
+        `searches.${now}`,
+        JSON.stringify(searchCriteria),
+        CLASS
+    );
+};
+
+export const getSearches = (): LastSearchBibleT[] | false => {
+    return ipcRenderer.sendSync('electronStoreGet', 'searches', CLASS);
+};
+
+export const getSearch = (searchDate: number): LastSearchBibleT | false => {
+    return ipcRenderer.sendSync(
+        'electronStoreGet',
+        `searches.${searchDate}`,
+        CLASS
+    );
 };
 
 export default {
@@ -109,4 +135,7 @@ export default {
     getAllVersionsVerse,
     setState,
     getState,
+    saveSearch,
+    getSearches,
+    getSearch,
 };

@@ -120,9 +120,12 @@ const search = () => {
         if (typeof bibleStore.verses == 'number') {
             routeParam = { name: 'bible.verse' };
         }
+        api.saveSearch(bibleStore.lastSearch!);
         router.push(routeParam);
     }
 };
+
+console.log(api.getSearches());
 
 const searchOne = () => {
     const result = api.search(bibleStore.$state, bookSearch.value);
