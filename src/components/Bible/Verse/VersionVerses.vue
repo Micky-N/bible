@@ -15,7 +15,7 @@ import { VerseT } from '../../../types/Bible';
 import Verse from '@/components/Bible/Book/Verse.vue';
 
 defineProps<{
-    verses: Array<VerseT & { id: number }>;
+    verses: Array<VerseT>;
     version_description: string;
     currentVerse: number;
 }>();

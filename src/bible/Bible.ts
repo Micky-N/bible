@@ -3,14 +3,14 @@ import {
     AllBooksT,
     BibleT,
     DefaultT,
+    ReferenceT,
     SearchBibleT,
     VerseT,
     VersionT,
 } from '../types/Bible';
-import EStore from '../utils/EStore';
 
-const DB_NAME = 'bibleDB';
 export default class Bible {
+    public static readonly DB_NAME: string = 'bibleDB';
     private extension: string;
     private currentVersion: string;
     private folder: string;
@@ -122,15 +122,13 @@ export default class Bible {
     }
 
     getVersions(): VersionT[] {
-        return require(path.join(__dirname, '../../src/bible/lib/versions.json'));
+        return require(path.resolve(this.folder, 'versions.json'));
     }
 
-    getVersion(): VersionT {
-        const versions: VersionT[] = require(path.join(
-            __dirname,
-            '../../src/bible/lib/versions.json'
-        ));
-        return versions.find((version) => version.guid == this.currentVersion);
+    getVersion(version: string | undefined = undefined): VersionT {
+        return this.getVersions().find(
+            (v) => v.guid == (version || this.currentVersion)
+        );
     }
 
     getAutoCompleteBooks(searchValue: string): string[] {
@@ -347,24 +345,45 @@ export default class Bible {
         return versionsVerse;
     }
 
-    setState(key: string, state: string): boolean {
-        try {
-            const eStore = new EStore(DB_NAME);
-            eStore.set(key, state);
-        } catch (error) {
-            console.error(error);
-            return false;
+    getReferences(verse: string): Array<ReferenceT> {
+        const references = require(path.resolve(
+            this.folder,
+            'references.json'
+        ));
+        if (!references[verse] || !references[verse].length) {
+            return [];
         }
-        return true;
-    }
 
-    getState(key: string): string | false {
-        try {
-            const eStore = new EStore(DB_NAME);
-            return eStore.get(key) as string;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
+        return references[verse].map((ref: string) => {
+            const refPart = ref
+                .split('.')
+                .map((r) => (!isNaN(r) ? parseInt(r) : r));
+            const bookName = this.getBook(
+                refPart[0] as number,
+                refPart[1] as number
+            ).value;
+            let verseVal = refPart[3];
+            if (typeof verseVal == 'string' && verseVal.includes('-')) {
+                verseVal = verseVal
+                    .split('-')
+                    .map((v) => parseInt(v) + 1)
+                    .join('-');
+            } else {
+                verseVal = (verseVal as number) + 1;
+            }
+            return {
+                value: `${bookName} ${(refPart[2] as number) + 1}: ${verseVal}`,
+                verses: this.getVerses({
+                    testament: refPart[0] as number,
+                    book: refPart[1] as number,
+                    chapter: refPart[2] as number,
+                    verses: refPart[3],
+                }),
+                testament: refPart[0] as number,
+                book: refPart[1] as number,
+                chapter: refPart[2] as number,
+                verse: refPart[3],
+            };
+        });
     }
 }

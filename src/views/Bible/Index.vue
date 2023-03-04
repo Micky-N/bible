@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link :to="{ name: 'bible.searches' }">Historiques</router-link>
         <last-search-button />
         <aside>
             <search-bar />
@@ -40,11 +41,10 @@ import { ApiBibleT } from '../../types/Bible';
 
 const bibleStore = useBibleStore();
 
-const { setChapter, setTestament, setBook } = bibleStore;
 const { testament, book } = storeToRefs(bibleStore);
 
 onMounted(() => {
-    setChapter(0);
+    bibleStore.setChapter(0);
 });
 const apiBible = inject('ApiBible') as ApiBibleT;
 
@@ -57,11 +57,11 @@ const books = computed(() => apiBible.getBooks(bibleStore.$state));
 const currentBook = computed(() => books.value[book.value]);
 
 const selectTestament = (idTestament: number) => {
-    setTestament(idTestament);
+    bibleStore.setTestament(idTestament);
 };
 
 const selectBook = (idBook: number) => {
-    setBook(idBook);
+    bibleStore.setBook(idBook);
 };
 </script>
 

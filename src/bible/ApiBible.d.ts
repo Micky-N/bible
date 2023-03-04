@@ -4,6 +4,7 @@ import {
     BookT,
     ChapterT,
     DefaultT,
+    ReferenceT,
     SearchBibleT,
     VerseT,
     VersionT,
@@ -56,6 +57,12 @@ export declare function getState(key: string): string | false;
 
 export declare function saveSearch(searchCriteria: SearchBibleT): boolean;
 
-export declare function getSearches(): SearchBibleT[] | false;
+export declare function getSearches(): { [time: string]: SearchBibleT } | false;
 
-export declare function getSearch(searchDate: number): SearchBibleT | false;
+export declare function getSearch(searchDate: string): SearchBibleT | false;
+
+export declare function deleteSearch(searchDate: string): boolean;
+
+export declare function getReferences(state: BibleStoreT): Array<ReferenceT>;
+
+export declare function clearSearch(): boolean;

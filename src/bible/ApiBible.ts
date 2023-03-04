@@ -4,6 +4,7 @@ import {
     BookT,
     ChapterT,
     DefaultT,
+    ReferenceT,
     SearchBibleT,
     VerseT,
     VersionT,
@@ -109,17 +110,41 @@ export const saveSearch = (state: BibleStoreT) => {
     );
 };
 
-export const getSearches = (): SearchBibleT[] | false => {
-    return ipcRenderer.sendSync('electronStoreGet', 'searches', CLASS);
+export const getSearches = (): { [time: string]: SearchBibleT } | false => {
+    const searches = ipcRenderer.sendSync(
+        'electronStoreGet',
+        'searches',
+        CLASS
+    );
+    for (const [k, v] of Object.entries(searches)) {
+        searches[k] = JSON.parse(v as string);
+    }
+    return searches;
 };
 
-export const getSearch = (searchDate: number): SearchBibleT | false => {
+export const getSearch = (searchDate: string): SearchBibleT | false => {
     const searchData: string | false = ipcRenderer.sendSync(
         'electronStoreGet',
         `searches.${searchDate}`,
         CLASS
     );
-    return searchData !== false ? JSON.parse(searchData) : searchData;
+    return searchData ? JSON.parse(searchData) : searchData;
+};
+
+export const deleteSearch = (searchDate: string): boolean => {
+    return ipcRenderer.sendSync(
+        'electronStoreDelete',
+        `searches.${searchDate}`,
+        CLASS
+    );
+};
+
+export const getReferences = (state: BibleStoreT): Array<ReferenceT> => {
+    return ipcRenderer.sendSync('references', getInstance(state));
+};
+
+export const clearSearch = (): boolean => {
+    return ipcRenderer.sendSync('electronStoreDelete', `searches`, CLASS);
 };
 
 export default {
@@ -139,4 +164,7 @@ export default {
     saveSearch,
     getSearches,
     getSearch,
+    getReferences,
+    deleteSearch,
+    clearSearch,
 };

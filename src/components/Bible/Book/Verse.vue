@@ -1,6 +1,6 @@
 <template>
     <span :class="{ colored }">
-        <sup @click="showVerse()">{{ verse.id + 1 }}</sup
+        <sup @click="clickable && showVerse()">{{ verse.id + 1 }}</sup
         >{{ verse.value + ' ' }}
     </span>
 </template>
@@ -10,15 +10,22 @@ import { useBibleStore } from '../../../store/BibleStore';
 import { useRouter } from 'vue-router';
 import { VerseT } from '../../../types/Bible';
 
-const props = defineProps<{
-    verse: VerseT;
-    colored: boolean | false;
-}>();
+const props = withDefaults(
+    defineProps<{
+        verse: VerseT;
+        colored: boolean;
+        clickable: boolean;
+    }>(),
+    {
+        colored: false,
+        clickable: true,
+    }
+);
 
 const r = useRouter();
-
+const useB = useBibleStore();
 const showVerse = () => {
-    useBibleStore().verses = props.verse.id;
+    useB.verses = props.verse.id;
     r.push({ name: 'bible.verse' });
 };
 </script>

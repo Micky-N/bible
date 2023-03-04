@@ -21,6 +21,7 @@
         "format": "prettier .  --write"
     },
     "devDependencies": {
+        "@types/luxon": "^3.2.0",
         "@vitejs/plugin-vue": "^4.0.0",
         "@vue/cli-plugin-router": "~5.0.0",
         "electron": "^23.1.1",
@@ -37,6 +38,7 @@
         "vue-tsc": "^1.1.7"
     },
     "dependencies": {
+        "@editorjs/editorjs": "^2.26.5",
         "crypto": "^1.0.1",
         "electron-devtools-installer": "^3.2.0",
         "electron-store": "^8.1.0",

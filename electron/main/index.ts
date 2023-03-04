@@ -1,8 +1,9 @@
-import { app, BrowserWindow, shell, ipcMain, ipcRenderer } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
 import Bible from '../../src/bible/Bible';
 import { BibleStoreT } from '../../src/types/Bible';
+import EStore from '../../src/utils/EStore';
 
 process.env.DIST_ELECTRON = join(__dirname, '..');
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist');
@@ -123,16 +124,58 @@ ipcMain.handle('open-win', (_, arg) => {
 ipcMain.on(
     'electronStoreSet',
     (event, key: string, state: string, classUse: string) => {
+        let dbName: string | false = false;
         if (classUse == 'Bible') {
-            event.returnValue = new Bible().setState(key, state);
+            dbName = Bible.DB_NAME;
         }
+        if (dbName) {
+            try {
+                const eStore = new EStore(dbName);
+                eStore.set(key, state);
+            } catch (error) {
+                console.error(error);
+                event.returnValue = false;
+                return;
+            }
+            event.returnValue = true;
+        }
+        event.returnValue = false;
     }
 );
 
 ipcMain.on('electronStoreGet', (event, key: string, classUse: string) => {
+    let dbName: string | false = false;
     if (classUse == 'Bible') {
-        event.returnValue = new Bible().getState(key);
+        dbName = Bible.DB_NAME;
     }
+    if (dbName) {
+        try {
+            const eStore = new EStore(dbName);
+            event.returnValue = eStore.get(key);
+            return;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    event.returnValue = false;
+});
+
+ipcMain.on('electronStoreDelete', (event, key: string, classUse: string) => {
+    let dbName: string | false = false;
+    if (classUse == 'Bible') {
+        dbName = Bible.DB_NAME;
+    }
+    if (dbName) {
+        try {
+            const eStore = new EStore(dbName);
+            eStore.delete(key);
+            event.returnValue = true;
+            return;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    event.returnValue = false;
 });
 
 ipcMain.on('testaments', (event, state: BibleStoreT) => {
@@ -178,6 +221,13 @@ ipcMain.on('version', (event, state: BibleStoreT) => {
 
 ipcMain.on('versions', (event) => {
     event.returnValue = new Bible().getVersions();
+});
+
+ipcMain.on('references', (event, state: BibleStoreT) => {
+    const { testament, book, chapter, verses } = state;
+    event.returnValue = new Bible()
+        .fromState(state)
+        .getReferences(`${testament}.${book}.${chapter}.${verses}`);
 });
 
 ipcMain.on(

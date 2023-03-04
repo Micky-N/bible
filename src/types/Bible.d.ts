@@ -30,7 +30,7 @@ export type VersionT = {
 export type BibleStoreT = SearchBibleT & {
     language: string;
     version: string;
-    lastSearchTime?: number;
+    lastSearchTime?: string;
 };
 
 export type SearchBibleT = {
@@ -51,3 +51,12 @@ export type AllBooksT = Array<{
     idTestament: number;
     book: { value: string; id: number };
 }>;
+
+export type ReferenceT = {
+    value: string;
+    verses: Array<VerseT>;
+    testament: number;
+    book: number;
+    chapter: number;
+    verse: string | number;
+};

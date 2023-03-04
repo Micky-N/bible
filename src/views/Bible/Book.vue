@@ -30,7 +30,6 @@ import { storeToRefs } from 'pinia';
 
 const bibleStore = useBibleStore();
 
-const { setVerses, setChapter } = bibleStore;
 const { chapter, version } = storeToRefs(bibleStore);
 
 const apiBible = inject('ApiBible') as ApiBibleT;
@@ -41,8 +40,8 @@ const versions = apiBible.getVersions();
 
 const selectChapter = (selectedChapter: number) => {
     if (chapter.value != selectedChapter) {
-        setVerses('*');
-        setChapter(selectedChapter);
+        bibleStore.setVerses('*');
+        bibleStore.setChapter(selectedChapter);
     }
 };
 

@@ -9,7 +9,8 @@ const eStoreStorage: Storage = {
         return ApiBible.setState(key, state);
     },
     getItem(key: string): string {
-        return ApiBible.getState(key) || '';
+        const data = ApiBible.getState(key);
+        return data ? JSON.stringify(data) : '';
     },
     clear(): void {
         throw new Error('Function not implemented.');
@@ -72,11 +73,15 @@ export const useBibleStore = defineStore('bibleStore', {
         setVerses(verses: string | number) {
             this.verses = verses;
         },
-        setLastSearchTime(lastSearchTime?: number) {
-            this.lastSearchTime = lastSearchTime || DateTime.now().toMillis();
+        setLastSearchTime(lastSearchTime?: string) {
+            this.lastSearchTime =
+                lastSearchTime || DateTime.now().toMillis().toString();
         },
         setSearchData(searchData: SearchBibleT) {
             this.$state = { ...this.$state, ...searchData };
+        },
+        resetLastSearchTime() {
+            this.lastSearchTime = undefined;
         },
     },
 });

@@ -174,10 +174,12 @@ watch(bookSearch, () => {
         .find(
             (b: { idTestament: number; book: { value: string; id: number } }) =>
                 b.book.value == bookSearch.value
-        ) as { idTestament: number; idBook: number; book: string } | undefined;
+        ) as
+        | { idTestament: number; book: { value: string; id: number } }
+        | undefined;
     if (bookObject !== undefined) {
         form.value.testament = bookObject.idTestament;
-        form.value.book = bookObject.idBook;
+        form.value.book = bookObject.book.id;
     } else {
         form.value.testament = undefined;
         form.value.book = undefined;

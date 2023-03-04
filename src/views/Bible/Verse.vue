@@ -30,6 +30,8 @@
             :version_description="verse.version_description"
             :current-verse="verse.id"
         />
+        <h5>References</h5>
+        <references :references="references" v-if="references.length" />
     </div>
 </template>
 
@@ -40,6 +42,7 @@ import VersionVerses from '@/components/Bible/Verse/VersionVerses.vue';
 import { computed, inject } from 'vue';
 import { useBibleStore } from '../../store/BibleStore';
 import { ApiBibleT } from '../../types/Bible';
+import References from '@/components/Bible/Verse/Reference/References.vue';
 
 const apiBible = inject('ApiBible') as ApiBibleT;
 const bstore = useBibleStore();
@@ -143,6 +146,8 @@ const allVersionsVerse = computed(() =>
 const goToVersion = (guid: string | number) => {
     bstore.setVersion(guid as string);
 };
+
+const references = computed(() => apiBible.getReferences(bstore.$state));
 
 const version = computed(() => apiBible.getVersion(bstore.$state));
 </script>

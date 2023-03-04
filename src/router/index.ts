@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import BibleIndex from '../views/Bible/Index.vue';
 import BibleBook from '../views/Bible/Book.vue';
 import BibleVerse from '../views/Bible/Verse.vue';
+import BibleSearches from '../views/Bible/Searches.vue';
 import HelloWorld from '../views/HelloWorld.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/bible/verse',
         name: 'bible.verse',
         component: BibleVerse,
+    },
+    {
+        path: '/bible/searches',
+        name: 'bible.searches',
+        component: BibleSearches,
     },
     {
         path: '/about',
