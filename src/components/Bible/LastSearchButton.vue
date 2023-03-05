@@ -6,15 +6,13 @@
 
 <script setup lang="ts">
 import { inject } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useBibleStore } from '../../store/BibleStore';
 import { ApiBibleT } from '../../types/Bible';
 
 const bS = useBibleStore();
 
 const router = useRouter();
-
-const route = useRoute();
 
 const api = inject('ApiBible') as ApiBibleT;
 
@@ -24,13 +22,14 @@ const goToLastSearch = () => {
         const lastSearch = api.getSearch(lastSearchTime);
         if (lastSearch) {
             bS.setSearchData(lastSearch);
-            let name = 'bible.book';
+            let routeParam: { name: string; query?: {} } = {
+                name: 'bible.book',
+                query: { colored: 1 },
+            };
             if (typeof bS.verses == 'number') {
-                name = 'bible.verse';
+                routeParam = { name: 'bible.verse' };
             }
-            if (route.name !== name) {
-                router.push({ name });
-            }
+            router.push(routeParam);
         }
     }
 };

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="navbar-nav mr-auto">
+        <div class="navbar-nav">
             <li class="nav-item">
                 <router-link :to="{ name: 'home' }" class="nav-link"
                     >home</router-link
@@ -9,6 +9,11 @@
             <li class="nav-item">
                 <router-link :to="{ name: 'bible.index' }" class="nav-link"
                     >bible</router-link
+                >
+            </li>
+            <li class="nav-item">
+                <router-link :to="{ name: 'notes.index' }" class="nav-link"
+                    >notes</router-link
                 >
             </li>
             <li class="nav-item">
@@ -22,4 +27,11 @@
 
 <script setup lang="ts"></script>
 
-<style></style>
+<style scoped>
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 20px;
+}
+</style>

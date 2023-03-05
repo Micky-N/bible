@@ -4,6 +4,7 @@ import BibleBook from '../views/Bible/Book.vue';
 import BibleVerse from '../views/Bible/Verse.vue';
 import BibleSearches from '../views/Bible/Searches.vue';
 import HelloWorld from '../views/HelloWorld.vue';
+import NotesIndex from '../views/Notes/Index.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -33,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
         component: BibleSearches,
     },
     {
+        path: '/notes',
+        name: 'notes.index',
+        component: NotesIndex,
+    },
+    {
         path: '/about',
         name: 'about',
         // route level code-splitting
@@ -42,6 +48,7 @@ const routes: Array<RouteRecordRaw> = [
             import(/* webpackChunkName: "about" */ '../views/About.vue'),
     },
 ];
+
 const router = createRouter({
     history: createWebHistory(),
     routes,
