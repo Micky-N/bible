@@ -1,5 +1,5 @@
 import {
-    AutoCompleteBookT,
+    AutoCompleteT,
     BibleStoreT,
     BookT,
     ChapterT,
@@ -40,7 +40,7 @@ export declare function getVersion(state: BibleStoreT): VersionT;
 export declare function autoCompleteBooks(
     state: BibleStoreT,
     searchValue: string
-): AutoCompleteBookT[];
+): AutoCompleteT[];
 
 export declare function search(
     state: BibleStoreT,

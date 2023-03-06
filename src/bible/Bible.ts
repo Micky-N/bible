@@ -357,6 +357,7 @@ export default class Bible {
         return references[verse].map((ref: string) => {
             const refPart = ref
                 .split('.')
+                // @ts-ignore
                 .map((r) => (!isNaN(r) ? parseInt(r) : r));
             const bookName = this.getBook(
                 refPart[0] as number,

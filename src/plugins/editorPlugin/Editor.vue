@@ -1,6 +1,7 @@
 <template>
     <div>
         <button @click="save">Save</button>
+        <button @click="exportHTML">Export HTML</button>
         <div id="editorjs"></div>
     </div>
 </template>
@@ -28,7 +29,7 @@ import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
 
-const emit = defineEmits(['saveBlocks']);
+const emit = defineEmits(['save', 'export-html']);
 
 const editor = new EditorJS({
     onReady: () => {
@@ -243,10 +244,42 @@ const save = () => {
     editor
         .save()
         .then((outputData) => {
-            emit('saveBlocks', outputData);
+            emit('save', outputData);
+        })
+        .catch((error) => {
+            console.error('Saving failed: ', error);
+        });
+};
+
+const exportHTML = () => {
+    editor
+        .save()
+        .then((outputData) => {
+            const edjsParser = require('editorjs-parser');
+            const test = {
+                paragraph: function (
+                    data: { [key: string]: string },
+                    config: { [key: string]: { [key: string]: string } }
+                ) {
+                    return `<p class='${config.paragraph.pClass} ${data.alignment}'>${data.text}</p>`;
+                },
+                separator: function () {
+                    return "<div class='separator'></div>";
+                },
+            };
+            const parser = new edjsParser(undefined, test);
+            emit('export-html', parser.parse(outputData));
         })
         .catch((error) => {
             console.error('Saving failed: ', error);
         });
 };
 </script>
+<style>
+#editorjs .ce-block__content {
+    max-width: 80vw;
+}
+#editorjs .ce-toolbar__content {
+    max-width: 80vw;
+}
+</style>
