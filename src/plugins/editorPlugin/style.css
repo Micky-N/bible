@@ -1,0 +1,9 @@
+.paragraph.right {
+    text-align: right;
+}
+
+.separator {
+    height: 1px;
+    margin: 30px auto;
+    background: #c5c5c5;
+}

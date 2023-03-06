@@ -1,11 +1,15 @@
 <template>
     <div>
-        <editor></editor>
+        <editor @save-blocks="saveBlock"></editor>
     </div>
 </template>
 
 <script setup lang="ts">
-import Editor from '@/components/Notes/Editor.vue';
+import { OutputData } from '@editorjs/editorjs';
+
+const saveBlock = (data: OutputData) => {
+    console.log(data);
+};
 </script>
 
 <style></style>

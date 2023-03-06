@@ -26,6 +26,9 @@ import ToggleBlock from 'editorjs-toggle-block';
 import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
+import { IconText } from '@codexteam/icons';
+
+const emit = defineEmits(['saveBlocks']);
 
 const editor = new EditorJS({
     onReady: () => {
@@ -40,7 +43,10 @@ const editor = new EditorJS({
         /**
          * Each Tool is a Plugin. Pass them via 'class' option with necessary settings {@link docs/tools.md}
          */
-        header: Header,
+        header: {
+            class: Header,
+            shortcut: 'CMD+SHIFT+H',
+        },
         /**
          * Or pass class directly without any configuration
          */
@@ -115,6 +121,9 @@ const editor = new EditorJS({
         paragraph: {
             class: Paragraph,
             inlineToolbar: true,
+            toolbox: {
+                icon: IconText,
+            },
         },
         code: {
             class: Code,
@@ -234,21 +243,10 @@ const save = () => {
     editor
         .save()
         .then((outputData) => {
-            console.log('Article data: ', outputData);
+            emit('saveBlocks', outputData);
         })
         .catch((error) => {
-            console.log('Saving failed: ', error);
+            console.error('Saving failed: ', error);
         });
 };
 </script>
-
-<style>
-.paragraph.right {
-    text-align: right;
-}
-.separator {
-    height: 1px;
-    margin: 30px auto;
-    background: #c5c5c5;
-}
-</style>
