@@ -2,7 +2,6 @@
     <div>
         <button @click="save">Save</button>
         <div id="editorjs"></div>
-        <div v-html="html"></div>
     </div>
 </template>
 
@@ -26,9 +25,7 @@ import Paragraph from 'editorjs-paragraph-with-alignment';
 import ToggleBlock from 'editorjs-toggle-block';
 import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
-import { ref } from 'vue';
-import { IconText } from '@codexteam/icons';
-import Separator from '../../plugins/editorPlugin/plugins/Separator';
+import Separator from './plugins/Separator';
 
 const editor = new EditorJS({
     onReady: () => {
@@ -118,9 +115,6 @@ const editor = new EditorJS({
         paragraph: {
             class: Paragraph,
             inlineToolbar: true,
-            toolbox: {
-                icon: IconText,
-            },
         },
         code: {
             class: Code,
@@ -236,24 +230,10 @@ const editor = new EditorJS({
     },
 });
 
-const html = ref('');
-
 const save = () => {
     editor
         .save()
         .then((outputData) => {
-            const edjsParser = require('editorjs-parser');
-            const test = {
-                paragraph: function (data, config) {
-                    return `<p class='${config.paragraph.pClass} ${data.alignment}'>${data.text}</p>`;
-                },
-                separator: function () {
-                    return "<div class='separator'></div>";
-                },
-            };
-            const parser = new edjsParser(undefined, test);
-            html.value = parser.parse(outputData);
-            console.log(html.value);
             console.log('Article data: ', outputData);
         })
         .catch((error) => {

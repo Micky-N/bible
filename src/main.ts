@@ -5,6 +5,7 @@ import router from './router';
 import { createPinia } from 'pinia';
 import piniaPersist from 'pinia-plugin-persist';
 import ApiBible from './bible/ApiBible';
+import editor from './plugins/editorPlugin';
 
 const Vue = createApp(App);
 const pinia = createPinia();
@@ -14,6 +15,7 @@ Vue.provide('ApiBible', ApiBible);
 
 Vue.use(pinia)
     .use(router)
+    .use(editor)
     .mount('#app')
     .$nextTick(() => {
         postMessage({ payload: 'removeLoading' }, '*');
