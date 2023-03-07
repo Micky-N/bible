@@ -1,5 +1,5 @@
 {
-    "name": "mybible",
+    "name": "mybiblecompanon",
     "version": "0.1.0",
     "main": "dist-electron/main/index.js",
     "description": "Bible App desktop for read scripture (verse with references) and note some studies and comments",
