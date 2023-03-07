@@ -1,17 +1,16 @@
 {
-    "name": "bible",
+    "name": "mybible",
     "version": "0.1.0",
     "main": "dist-electron/main/index.js",
-    "description": "Really simple Electron + Vue + Vite boilerplate.",
+    "description": "Bible App desktop for read scripture (verse with references) and note some studies and comments",
     "author": "Mickaël Ndinga <ndingamickael@gmail.com>",
     "license": "MIT",
     "private": true,
     "keywords": [
-        "electron",
-        "rollup",
-        "vite",
-        "vue3",
-        "vue"
+        "bible",
+        "christian",
+        "scripture study",
+        "bible study"
     ],
     "scripts": {
         "dev": "vite",

@@ -1,5 +1,5 @@
 {
-    "appId": "YourAppID",
+    "appId": "9e8696c8-d088-4551-9819-90b7cab4be72",
     "asar": true,
     "icon": "public/favicon.ico",
     "directories": {
@@ -23,6 +23,16 @@
         "oneClick": false,
         "perMachine": true,
         "allowToChangeInstallationDirectory": true,
-        "deleteAppDataOnUninstall": false
+        "deleteAppDataOnUninstall": true,
+        "allowElevation": true,
+        "installerIcon": "",
+        "uninstallerIcon": "",
+        "installerHeader": "",
+        "installerHeaderIcon": "",
+        "installerSidebar": "",
+        "uninstallerSidebar": "",
+        "uninstallDisplayName": "${productName}_${version}",
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true
     }
 }
