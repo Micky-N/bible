@@ -15,7 +15,18 @@ const props = defineProps<{
 }>();
 
 const config = ref({
-    data: props.note,
+    data: {...props.note, blocks: [...props.note.blocks, {
+    "type" : "image",
+    "data" : {
+        "file": {
+            "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
+        },
+        "caption" : "Roadster // tesla.com",
+        "withBorder" : false,
+        "withBackground" : false,
+        "stretched" : true
+    }
+}]},
     readOnly: true,
     saveName: 'Update',
 });

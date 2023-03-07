@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import Editor from './Editor.vue';
 import Header from '@editorjs/header';
-import SimpleImage from '@editorjs/simple-image';
+import Image from '@editorjs/image';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Quote from '@editorjs/quote';
@@ -40,10 +40,7 @@ const editorPlugin = (app: App) => {
             /**
              * Or pass class directly without any configuration
              */
-            image: {
-                class: SimpleImage,
-                inlineToolbar: ['link'],
-            },
+            image: Image,
             list: {
                 class: List,
                 inlineToolbar: true,
