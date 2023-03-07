@@ -1,3 +1,4 @@
+import { Note } from '../types/Note';
 declare const CLASS: string;
 
 export function getNotes(): Note[];
