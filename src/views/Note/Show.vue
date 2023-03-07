@@ -1,24 +1,49 @@
 <template>
-    <div>test</div>
+    <div>
+        <input type="text" v-model="updatedTitle" placeholder="Note title" />
+        <editor @dblclick="edit" @save="updateNote" :config="config"></editor>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
+import { OutputData } from '@editorjs/editorjs';
+import { inject, ref } from 'vue';
 import { ApiNoteT, Note } from '../../types/Note';
 
 const props = defineProps<{
-    note: Note;
+    note: Note & { id: string };
 }>();
+
+const config = ref({
+    data: props.note,
+    readOnly: true,
+    saveName: 'Update',
+});
+
+const updatedTitle = ref(props.note.title);
 const apiNote = inject('ApiNote') as ApiNoteT;
 
-const deleteNote = (idNote: string) => {
-    const res = apiNote.deleteNote(idNote);
+const updateNote = (data: OutputData) => {
+    const updatedNote = { ...props.note, ...data };
+    if (updatedTitle.value !== props.note.title) {
+        updatedNote.title = updatedTitle.value;
+    }
+    const res = apiNote.saveNote(updatedNote);
     if (!res) {
-        console.error('error in delete note #' + idNote);
+        console.error('error in saving !');
     }
 };
 
-const update = () => {};
+const edit = () => {
+    config.value.readOnly = false;
+};
 </script>
 
-<style></style>
+<style scoped>
+.htmlcontent {
+    position: relative;
+    max-width: 650px;
+    margin: 0 auto;
+    padding-bottom: 300px;
+}
+</style>

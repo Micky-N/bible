@@ -5,4 +5,5 @@ export type ApiNoteT = typeof ApiNote;
 
 export type Note = OutputData & {
     title: string;
+    id?: string;
 };

@@ -1,7 +1,7 @@
 <template>
     <div>
         <input type="text" v-model="title" placeholder="Note title" />
-        <editor @save="saveBlock"></editor>
+        <editor @save="saveNote" :config="config"></editor>
     </div>
 </template>
 
@@ -14,7 +14,11 @@ const test = ref('');
 const title = ref('');
 const apiNote = inject('ApiNote') as ApiNoteT;
 
-const saveBlock = (data: OutputData) => {
+const config = ref({
+    saveName: 'Save',
+});
+
+const saveNote = (data: OutputData) => {
     if (title.value) {
         const newNote = { ...data, title: title.value };
         const res = apiNote.saveNote(newNote);
@@ -24,10 +28,6 @@ const saveBlock = (data: OutputData) => {
     } else {
         console.error('title not set');
     }
-};
-
-const saveHtml = (html: string) => {
-    test.value = html;
 };
 </script>
 

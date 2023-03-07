@@ -3,7 +3,6 @@ import NoteLayout from '../views/Note/Layout.vue';
 import NoteIndex from '../views/Note/Index.vue';
 import NoteShow from '../views/Note/Show.vue';
 import NoteNew from '../views/Note/New.vue';
-import { Note } from '../types/Note';
 import ApiNote from '../note/ApiNote';
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,7 +24,13 @@ const routes: Array<RouteRecordRaw> = [
                 path: ':note/show',
                 name: 'notes.show',
                 component: NoteShow,
-                props: (route) => ({ idNote: route.params.note }),
+                props: (route) => {
+                    const note = ApiNote.getNote(route.params.note as string);
+                    if (!note) {
+                        return false;
+                    }
+                    return { note };
+                },
             },
         ],
     },

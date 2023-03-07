@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Note } from '../types/Note';
+import crypto from 'crypto';
 
 const CLASS = 'Note';
 
@@ -12,9 +13,12 @@ export const getNote = (idNote: string): Note | false => {
 };
 
 export const saveNote = (note: Note): boolean => {
+    if (note.id == undefined) {
+        note.id = crypto.randomUUID();
+    }
     return ipcRenderer.sendSync(
         'electronStoreSet',
-        'notes.' + note.time,
+        'notes.' + note.id,
         note,
         CLASS
     );

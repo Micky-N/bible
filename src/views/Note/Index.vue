@@ -1,31 +1,16 @@
 <template>
     <div>test</div>
     <router-link :to="{ name: 'notes.new' }">New note</router-link>
+    <note v-for="note in notes" :key="note.id" :note="note" />
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
-import { useRouter } from 'vue-router';
+import { inject } from 'vue';
 import { ApiNoteT } from '../../types/Note';
+import Note from '@/components/Notes/Index/Note.vue';
 
-const apiNote = inject('ApiNote') as ApiNoteT;
+let apiNote = inject('ApiNote') as ApiNoteT;
 const notes = apiNote.getNotes();
-const router = useRouter();
-const deleteNote = (idNote: string) => {
-    const res = apiNote.deleteNote(idNote);
-    if (!res) {
-        console.error('error in delete note #' + idNote);
-    }
-};
-
-const showNote = (idNote: string) => {
-    const res = apiNote.noteExists(idNote);
-    if (res) {
-        router.push({ name: 'notes.show', params: { note: idNote } });
-    } else {
-        console.error('Note not exists: #' + idNote);
-    }
-};
 </script>
 
 <style></style>
