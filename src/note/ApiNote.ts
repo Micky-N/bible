@@ -1,21 +1,31 @@
+import { ipcRenderer } from 'electron';
 import { SavedData } from '../types/Note';
 
 const CLASS = 'Note';
 
 export const getNotes = (): SavedData[] => {
-    return [];
+    return ipcRenderer.sendSync('electronStoreGet', 'notes', CLASS);
 };
 
 export const getNote = (idNote: string): SavedData | false => {
-    return false;
+    return ipcRenderer.sendSync('electronStoreGet', 'notes.' + idNote, CLASS);
 };
 
 export const saveNote = (note: SavedData): boolean => {
-    return true;
+    return ipcRenderer.sendSync(
+        'electronStoreSet',
+        'notes.' + note.time,
+        note,
+        CLASS
+    );
 };
 
 export const deleteNote = (idNote: string): boolean => {
-    return true;
+    return ipcRenderer.sendSync(
+        'electronStoreDelete',
+        'notes.' + idNote,
+        CLASS
+    );
 };
 
 export default {

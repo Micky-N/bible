@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
 import Bible from '../../src/bible/Bible';
+import Note from '../../src/note/Note';
 import { BibleStoreT } from '../../src/types/Bible';
 import EStore from '../../src/utils/EStore';
 
@@ -127,6 +128,8 @@ ipcMain.on(
         let dbName: string | false = false;
         if (classUse == 'Bible') {
             dbName = Bible.DB_NAME;
+        } else if (classUse == 'Note') {
+            dbName = Note.DB_NAME;
         }
         if (dbName) {
             try {
@@ -147,6 +150,8 @@ ipcMain.on('electronStoreGet', (event, key: string, classUse: string) => {
     let dbName: string | false = false;
     if (classUse == 'Bible') {
         dbName = Bible.DB_NAME;
+    } else if (classUse == 'Note') {
+        dbName = Note.DB_NAME;
     }
     if (dbName) {
         try {
@@ -164,6 +169,8 @@ ipcMain.on('electronStoreDelete', (event, key: string, classUse: string) => {
     let dbName: string | false = false;
     if (classUse == 'Bible') {
         dbName = Bible.DB_NAME;
+    } else if (classUse == 'Note') {
+        dbName = Note.DB_NAME;
     }
     if (dbName) {
         try {
