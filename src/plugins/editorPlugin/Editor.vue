@@ -36,6 +36,7 @@ const save = () => {
     editor
         .save()
         .then((outputData) => {
+            console.log(outputData)
             emit('save', outputData);
         })
         .catch((error) => {
