@@ -3,7 +3,7 @@ import NoteLayout from '../views/Note/Layout.vue';
 import NoteIndex from '../views/Note/Index.vue';
 import NoteShow from '../views/Note/Show.vue';
 import NoteNew from '../views/Note/New.vue';
-import { SavedData } from '../types/Note';
+import { Note } from '../types/Note';
 import ApiNote from '../note/ApiNote';
 
 const routes: Array<RouteRecordRaw> = [

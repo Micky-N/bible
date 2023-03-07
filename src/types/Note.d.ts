@@ -3,6 +3,6 @@ import ApiNote from '../note/ApiNote';
 
 export type ApiNoteT = typeof ApiNote;
 
-export type SavedData = OutputData & {
+export type Note = OutputData & {
     title: string;
 };

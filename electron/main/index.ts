@@ -185,6 +185,25 @@ ipcMain.on('electronStoreDelete', (event, key: string, classUse: string) => {
     event.returnValue = false;
 });
 
+ipcMain.on('electronStoreHas', (event, key: string, classUse: string) => {
+    let dbName: string | false = false;
+    if (classUse == 'Bible') {
+        dbName = Bible.DB_NAME;
+    } else if (classUse == 'Note') {
+        dbName = Note.DB_NAME;
+    }
+    if (dbName) {
+        try {
+            const eStore = new EStore(dbName);
+            event.returnValue = eStore.has(key);
+            return;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    event.returnValue = false;
+});
+
 ipcMain.on('testaments', (event, state: BibleStoreT) => {
     event.returnValue = new Bible().fromState(state).getTestaments();
 });

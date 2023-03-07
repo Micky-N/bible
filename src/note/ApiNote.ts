@@ -1,17 +1,17 @@
 import { ipcRenderer } from 'electron';
-import { SavedData } from '../types/Note';
+import { Note } from '../types/Note';
 
 const CLASS = 'Note';
 
-export const getNotes = (): SavedData[] => {
+export const getNotes = (): Note[] => {
     return ipcRenderer.sendSync('electronStoreGet', 'notes', CLASS);
 };
 
-export const getNote = (idNote: string): SavedData | false => {
+export const getNote = (idNote: string): Note | false => {
     return ipcRenderer.sendSync('electronStoreGet', 'notes.' + idNote, CLASS);
 };
 
-export const saveNote = (note: SavedData): boolean => {
+export const saveNote = (note: Note): boolean => {
     return ipcRenderer.sendSync(
         'electronStoreSet',
         'notes.' + note.time,
@@ -28,9 +28,14 @@ export const deleteNote = (idNote: string): boolean => {
     );
 };
 
+export const noteExists = (idNote: string): boolean => {
+    return ipcRenderer.sendSync('electronStoreHas', 'notes.' + idNote, CLASS);
+};
+
 export default {
     getNotes,
     getNote,
     saveNote,
     deleteNote,
+    noteExists,
 };
