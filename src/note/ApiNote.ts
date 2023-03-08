@@ -36,10 +36,15 @@ export const noteExists = (idNote: string): boolean => {
     return ipcRenderer.sendSync('electronStoreHas', 'notes.' + idNote, CLASS);
 };
 
+export const getImageFromLocal = (image: string) => {
+    return ipcRenderer.sendSync('getImageFromLocal', image);
+}
+
 export default {
     getNotes,
     getNote,
     saveNote,
     deleteNote,
     noteExists,
+    getImageFromLocal
 };

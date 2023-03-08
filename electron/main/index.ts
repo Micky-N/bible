@@ -1,6 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain, Event } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
+import fs from 'node:fs';
 import Bible from '../../src/bible/Bible';
 import Note from '../../src/note/Note';
 import { BibleStoreT } from '../../src/types/Bible';
@@ -273,6 +274,11 @@ ipcMain.on(
             .getAllVersionsVerse(state);
     }
 );
+
+ipcMain.on('getImageFromLocal', (event: Event, file: string) => {
+    const loadedFile = fs.readFileSync(file, {encoding: 'base64'})
+    event.returnValue = loadedFile
+})
 
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);

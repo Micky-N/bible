@@ -20,6 +20,7 @@ import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
+import ApiNote from '../../note/ApiNote'
 import './style.css';
 
 const editorPlugin = (app: App) => {
@@ -45,12 +46,13 @@ const editorPlugin = (app: App) => {
             image: {
                 class: Image,
                 config: {
-                    endpoints: {
-                        byUrl: 'https://',
-                    },
                     uploader: {
-                        uploadByUrl: (e) => {
+                        uploadByUrl: function(e){
                             console.log(e);
+                        },
+                        uploadByFile: function(e){
+                            console.log(e.path)
+                            console.log(ApiNote.getImageFromLocal(e.path));
                         },
                     },
                 },

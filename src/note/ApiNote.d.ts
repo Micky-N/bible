@@ -10,3 +10,5 @@ export function saveNote(note: Note): boolean;
 export function deleteNote(idNote: string): boolean;
 
 export function noteExists(idNote: string): boolean;
+
+export function getImageFromLocal(image: object)
