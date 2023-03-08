@@ -1,5 +1,5 @@
 # Logs
-.db
+resources/database
 logs
 *.log
 npm-debug.log*

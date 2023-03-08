@@ -1,4 +1,3 @@
-import { IconDelimiter } from '@codexteam/icons';
 export default class Separator {
     static get isReadOnlySupported(): true {
         return true;

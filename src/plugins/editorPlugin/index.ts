@@ -2,6 +2,7 @@ import type { App } from 'vue';
 import Editor from './Editor.vue';
 import Header from '@editorjs/header';
 import Image from '@editorjs/image';
+import SimpleImage from '@editorjs/simple-image';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Quote from '@editorjs/quote';
@@ -11,7 +12,7 @@ import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
 import Embed from '@editorjs/embed';
 import Table from '@editorjs/table';
-import Link from '@editorjs/link';
+import Link from '../../plugins/editorPlugin/plugins/LinkTool';
 import Color from 'editorjs-text-color-plugin';
 import Paragraph from 'editorjs-paragraph-with-alignment';
 import ToggleBlock from 'editorjs-toggle-block';
@@ -37,6 +38,7 @@ const editorPlugin = (app: App) => {
                 class: Header,
                 shortcut: 'CMD+SHIFT+H',
             },
+            simpleImage: SimpleImage,
             /**
              * Or pass class directly without any configuration
              */

@@ -1,8 +1,8 @@
 <template>
     <div class="inline">
         <span @click="showNote">{{ note.id }}</span>
-        <p>{{ note.title }}</p>
-        <button @click="deleteNote">delete</button>
+        <span>{{ note.title }}</span>
+        <span @click="deleteNote">delete</span>
     </div>
 </template>
 

@@ -1,7 +1,13 @@
 <template>
     <div>
         <input type="text" v-model="updatedTitle" placeholder="Note title" />
-        <editor @dblclick="edit" @save="updateNote" :config="config"></editor>
+        <editor
+            @dblclick="edit"
+            @save="updateNote"
+            @export-html="show"
+            :config="config"
+        ></editor>
+        <div v-html="html"></div>
     </div>
 </template>
 
@@ -15,18 +21,7 @@ const props = defineProps<{
 }>();
 
 const config = ref({
-    data: {...props.note, blocks: [...props.note.blocks, {
-    "type" : "image",
-    "data" : {
-        "file": {
-            "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
-        },
-        "caption" : "Roadster // tesla.com",
-        "withBorder" : false,
-        "withBackground" : false,
-        "stretched" : true
-    }
-}]},
+    data: props.note,
     readOnly: true,
     saveName: 'Update',
 });
@@ -47,6 +42,12 @@ const updateNote = (data: OutputData) => {
 
 const edit = () => {
     config.value.readOnly = false;
+};
+
+const html = ref('');
+
+const show = (toHtml: string) => {
+    html.value = toHtml;
 };
 </script>
 

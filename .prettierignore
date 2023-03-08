@@ -1,3 +1,4 @@
-src/bible/lib
+resources
+release
 dist-electron
 dist

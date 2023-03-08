@@ -22,7 +22,7 @@ export default class Bible {
     ) {
         this.language = language;
         this.currentVersion = currentVersion;
-        this.folder = path.join(__dirname, '../../src/bible', 'lib');
+        this.folder = path.join(process.cwd(), 'resources', 'lib');
         this.extension = '.json';
     }
 

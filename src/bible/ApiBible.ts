@@ -105,30 +105,21 @@ export const saveSearch = (state: BibleStoreT) => {
     return ipcRenderer.sendSync(
         'electronStoreSet',
         `searches.${time}`,
-        JSON.stringify({ testament, book, chapter, verses }),
+        JSON.parse(JSON.stringify({ testament, book, chapter, verses })),
         CLASS
     );
 };
 
 export const getSearches = (): { [time: string]: SearchBibleT } | false => {
-    const searches = ipcRenderer.sendSync(
-        'electronStoreGet',
-        'searches',
-        CLASS
-    );
-    for (const [k, v] of Object.entries(searches)) {
-        searches[k] = JSON.parse(v as string);
-    }
-    return searches;
+    return ipcRenderer.sendSync('electronStoreGet', 'searches', CLASS);
 };
 
 export const getSearch = (searchDate: string): SearchBibleT | false => {
-    const searchData: string | false = ipcRenderer.sendSync(
+    return ipcRenderer.sendSync(
         'electronStoreGet',
         `searches.${searchDate}`,
         CLASS
     );
-    return searchData ? JSON.parse(searchData) : searchData;
 };
 
 export const deleteSearch = (searchDate: string): boolean => {

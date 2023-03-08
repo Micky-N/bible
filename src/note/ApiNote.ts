@@ -19,7 +19,7 @@ export const saveNote = (note: Note): boolean => {
     return ipcRenderer.sendSync(
         'electronStoreSet',
         'notes.' + note.id,
-        note,
+        JSON.parse(JSON.stringify(note)),
         CLASS
     );
 };

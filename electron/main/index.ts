@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Event } from 'electron';
 import { release } from 'node:os';
 import { join } from 'node:path';
 import Bible from '../../src/bible/Bible';
@@ -124,7 +124,7 @@ ipcMain.handle('open-win', (_, arg) => {
 
 ipcMain.on(
     'electronStoreSet',
-    (event, key: string, state: string, classUse: string) => {
+    (event: Event, key: string, state: string, classUse: string) => {
         let dbName: string | false = false;
         if (classUse == 'Bible') {
             dbName = Bible.DB_NAME;
@@ -153,16 +153,12 @@ ipcMain.on('electronStoreGet', (event, key: string, classUse: string) => {
     } else if (classUse == 'Note') {
         dbName = Note.DB_NAME;
     }
-    if (dbName) {
-        try {
-            const eStore = new EStore(dbName);
-            event.returnValue = eStore.get(key);
-            return;
-        } catch (error) {
-            console.error(error);
-        }
+    if (!dbName) {
+        event.returnValue = false;
+        return;
     }
-    event.returnValue = false;
+    const eStore = new EStore(dbName);
+    event.returnValue = eStore.get(key, false);
 });
 
 ipcMain.on('electronStoreDelete', (event, key: string, classUse: string) => {
