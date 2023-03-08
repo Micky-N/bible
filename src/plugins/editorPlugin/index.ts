@@ -38,11 +38,23 @@ const editorPlugin = (app: App) => {
                 class: Header,
                 shortcut: 'CMD+SHIFT+H',
             },
-            simpleImage: SimpleImage,
+            // simpleImage: SimpleImage,
             /**
              * Or pass class directly without any configuration
              */
-            image: Image,
+            image: {
+                class: Image,
+                config: {
+                    endpoints: {
+                        byUrl: 'https://',
+                    },
+                    uploader: {
+                        uploadByUrl: (e) => {
+                            console.log(e);
+                        },
+                    },
+                },
+            },
             list: {
                 class: List,
                 inlineToolbar: true,
