@@ -1,36 +1,4 @@
 /**
- * Image Tool for the Editor.js
- *
- * @author CodeX <team@codex.so>
- * @license MIT
- * @see {@link https://github.com/editor-js/image}
- *
- * To developers.
- * To simplify Tool structure, we split it to 4 parts:
- *  1) index.js — main Tool's interface, public API and methods for working with data
- *  2) uploader.js — module that has methods for sending files via AJAX: from device, by URL or File pasting
- *  3) ui.js — module for UI manipulations: render, showing preloader, etc
- *  4) tunes.js — working with Block Tunes: render buttons, handle clicks
- *
- * For debug purposes there is a testing server
- * that can save uploaded files and return a Response {@link UploadResponseFormat}
- *
- *       $ node dev/server.js
- *
- * It will expose 8008 port, so you can pass http://localhost:8008 with the Tools config:
- *
- * image: {
- *   class: ImageTool,
- *   config: {
- *     endpoints: {
- *       byFile: 'http://localhost:8008/uploadFile',
- *       byUrl: 'http://localhost:8008/fetchUrl',
- *     }
- *   },
- * },
- */
-
-/**
  * @typedef {object} ImageToolData
  * @description Image Tool's input and output data format
  * @property {string} caption — image caption
@@ -42,7 +10,6 @@
  */
 
 import './index.css';
-
 import Ui from './ui';
 import Uploader from './uploader';
 
@@ -80,6 +47,7 @@ import {
  * @property {string} file.url - [Required] image source URL
  */
 export default class ImageTool {
+    ui: Ui;
     /**
      * Notify core that read-only mode is supported
      *

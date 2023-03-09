@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import Editor from './Editor.vue';
 import Header from '@editorjs/header';
-import Image from '@editorjs/image';
+import Image from './plugins/ImageTool';
 import SimpleImage from '@editorjs/simple-image';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
@@ -20,7 +20,7 @@ import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
-import ApiNote from '../../note/ApiNote'
+import ApiNote from '../../note/ApiNote';
 import './style.css';
 
 const editorPlugin = (app: App) => {
@@ -47,12 +47,17 @@ const editorPlugin = (app: App) => {
                 class: Image,
                 config: {
                     uploader: {
-                        uploadByUrl: function(e){
-                            console.log(e);
-                        },
-                        uploadByFile: function(e){
-                            console.log(e.path)
-                            console.log(ApiNote.getImageFromLocal(e.path));
+                        // uploadByUrl: function (url) {
+                        //     console.log(url);
+                        // },²
+                        uploadByFile: function (file: File) {
+                            const base64 = ApiNote.getImageFromLocal(file.path);
+                            return {
+                                success: 1,
+                                file: {
+                                    url: `data:${file.type};base64,${base64}`,
+                                },
+                            };
                         },
                     },
                 },

@@ -18,6 +18,6 @@ export function make(tagName, classNames = null, attributes = {}) {
     for (const attrName in attributes) {
         el[attrName] = attributes[attrName];
     }
-
+    console.log(el);
     return el;
 }

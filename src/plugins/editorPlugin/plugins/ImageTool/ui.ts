@@ -99,7 +99,7 @@ export default class Ui {
         } else {
             this.toggleStatus(Ui.status.UPLOADING);
         }
-
+        console.log(this.nodes.wrapper);
         return this.nodes.wrapper;
     }
 

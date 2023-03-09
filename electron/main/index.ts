@@ -276,9 +276,9 @@ ipcMain.on(
 );
 
 ipcMain.on('getImageFromLocal', (event: Event, file: string) => {
-    const loadedFile = fs.readFileSync(file, {encoding: 'base64'})
-    event.returnValue = loadedFile
-})
+    const loadedFile = fs.readFileSync(file, { encoding: 'base64' });
+    event.returnValue = loadedFile;
+});
 
 ipcMain.on('home', (event) => {
     event.sender.loadURL(url);

@@ -38,7 +38,7 @@ export const noteExists = (idNote: string): boolean => {
 
 export const getImageFromLocal = (image: string) => {
     return ipcRenderer.sendSync('getImageFromLocal', image);
-}
+};
 
 export default {
     getNotes,
@@ -46,5 +46,5 @@ export default {
     saveNote,
     deleteNote,
     noteExists,
-    getImageFromLocal
+    getImageFromLocal,
 };
