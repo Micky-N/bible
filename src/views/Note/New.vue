@@ -8,11 +8,13 @@
 <script setup lang="ts">
 import { OutputData } from '@editorjs/editorjs';
 import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { ApiNoteT } from '../../types/Note';
 
 const test = ref('');
 const title = ref('');
 const apiNote = inject('ApiNote') as ApiNoteT;
+const router = useRouter();
 
 const config = ref({
     saveName: 'Save',
@@ -24,6 +26,8 @@ const saveNote = (data: OutputData) => {
         const res = apiNote.saveNote(newNote);
         if (!res) {
             console.error('error in saving !');
+        } else {
+            router.push({ name: 'notes.show', params: { note: res.id } });
         }
     } else {
         console.error('title not set');

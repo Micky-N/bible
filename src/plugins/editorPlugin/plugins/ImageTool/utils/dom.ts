@@ -1,12 +1,8 @@
-/**
- * Helper for making Elements with attributes
- *
- * @param  {string} tagName           - new Element tag name
- * @param  {Array|string} classNames  - list or name of CSS class
- * @param  {object} attributes        - any attributes
- * @returns {Element}
- */
-export function make(tagName, classNames = null, attributes = {}) {
+export function make(
+    tagName: string,
+    classNames: string[] | string | null = null,
+    attributes: { [key: string]: string } = {}
+): Element {
     const el = document.createElement(tagName);
 
     if (Array.isArray(classNames)) {
@@ -16,8 +12,8 @@ export function make(tagName, classNames = null, attributes = {}) {
     }
 
     for (const attrName in attributes) {
+        // @ts-ignore
         el[attrName] = attributes[attrName];
     }
-    console.log(el);
     return el;
 }

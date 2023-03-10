@@ -1,11 +1,17 @@
 <template>
     <div>
-        <input type="text" v-model="updatedTitle" placeholder="Note title" />
+        <input
+            type="text"
+            :readonly="config.readOnly"
+            v-model="updatedTitle"
+            placeholder="Note title"
+        />
         <editor
             @dblclick="edit"
             @save="updateNote"
             @export-html="show"
             :config="config"
+            :data="currentNote"
         ></editor>
         <div v-html="html"></div>
     </div>
@@ -20,24 +26,27 @@ const props = defineProps<{
     note: Note & { id: string };
 }>();
 
+const currentNote = ref<typeof props.note>(props.note);
+
 const config = ref({
-    data: props.note,
     readOnly: true,
     saveName: 'Update',
 });
 
-const updatedTitle = ref(props.note.title);
+const updatedTitle = ref(currentNote.value.title);
 const apiNote = inject('ApiNote') as ApiNoteT;
 
 const updateNote = (data: OutputData) => {
-    const updatedNote = { ...props.note, ...data };
-    if (updatedTitle.value !== props.note.title) {
+    const updatedNote = { ...currentNote.value, ...data };
+    if (updatedTitle.value !== currentNote.value.title) {
         updatedNote.title = updatedTitle.value;
     }
     const res = apiNote.saveNote(updatedNote);
     if (!res) {
         console.error('error in saving !');
     }
+    currentNote.value.blocks = updatedNote.blocks;
+    config.value.readOnly = true;
 };
 
 const edit = () => {

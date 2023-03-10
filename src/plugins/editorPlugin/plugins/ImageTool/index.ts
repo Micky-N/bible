@@ -1,17 +1,7 @@
-/**
- * @typedef {object} ImageToolData
- * @description Image Tool's input and output data format
- * @property {string} caption — image caption
- * @property {boolean} withBorder - should image be rendered with border
- * @property {boolean} withBackground - should image be rendered with background
- * @property {boolean} stretched - should image be stretched to full width of container
- * @property {object} file — Image file data returned from backend
- * @property {string} file.url — image URL
- */
-
 import './index.css';
+
 import Ui from './ui';
-import Uploader from './uploader';
+import Uploader, { ImageConfig, ImageToolData } from './uploader';
 
 import {
     IconAddBorder,
@@ -20,34 +10,45 @@ import {
     IconPicture,
 } from '@codexteam/icons';
 
-/**
- * @typedef {object} ImageConfig
- * @description Config supported by Tool
- * @property {object} endpoints - upload endpoints
- * @property {string} endpoints.byFile - upload by file
- * @property {string} endpoints.byUrl - upload by URL
- * @property {string} field - field name for uploaded image
- * @property {string} types - available mime-types
- * @property {string} captionPlaceholder - placeholder for Caption field
- * @property {object} additionalRequestData - any data to send with requests
- * @property {object} additionalRequestHeaders - allows to pass custom headers with Request
- * @property {string} buttonContent - overrides for Select File button
- * @property {object} [uploader] - optional custom uploader
- * @property {function(File): Promise.<UploadResponseFormat>} [uploader.uploadByFile] - method that upload image by File
- * @property {function(string): Promise.<UploadResponseFormat>} [uploader.uploadByUrl] - method that upload image by URL
- */
-
-/**
- * @typedef {object} UploadResponseFormat
- * @description This format expected from backend on file uploading
- * @property {number} success - 1 for successful uploading, 0 for failure
- * @property {object} file - Object with file data.
- *                           'url' is required,
- *                           also can contain any additional data that will be saved and passed back
- * @property {string} file.url - [Required] image source URL
- */
 export default class ImageTool {
+    api: object;
+    readOnly: boolean;
+    config: {
+        endpoints: { byFile: string; byUrl: string };
+        additionalRequestData: object;
+        additionalRequestHeaders: object;
+        field: string;
+        types: string;
+        captionPlaceholder: any;
+        buttonContent: string;
+        uploader:
+            | {
+                  uploadByFile?:
+                      | ((
+                            arg: File
+                        ) => Promise<
+                            import('c:/node/electronJs/bible/src/plugins/editorPlugin/plugins/ImageTool/uploader').UploadResponseFormat
+                        >)
+                      | undefined;
+                  uploadByUrl?:
+                      | ((
+                            arg: string
+                        ) => Promise<
+                            import('c:/node/electronJs/bible/src/plugins/editorPlugin/plugins/ImageTool/uploader').UploadResponseFormat
+                        >)
+                      | undefined;
+                  /**
+                   * Available image tools
+                   *
+                   * @returns {Array}
+                   */
+              }
+            | undefined;
+        actions: any;
+    };
+    uploader: Uploader;
     ui: Ui;
+    _data: {};
     /**
      * Notify core that read-only mode is supported
      *
@@ -106,7 +107,17 @@ export default class ImageTool {
      * @param {object} tool.api - Editor.js API
      * @param {boolean} tool.readOnly - read-only mode flag
      */
-    constructor({ data, config, api, readOnly }) {
+    constructor({
+        data,
+        config,
+        api,
+        readOnly,
+    }: {
+        data: ImageToolData;
+        config: ImageConfig;
+        api: object;
+        readOnly: boolean;
+    }) {
         this.api = api;
         this.readOnly = readOnly;
 
@@ -132,8 +143,8 @@ export default class ImageTool {
          */
         this.uploader = new Uploader({
             config: this.config,
-            onUpload: (response) => this.onUpload(response),
-            onError: (error) => this.uploadingFailed(error),
+            onUpload: (response: any) => this.onUpload(response),
+            onError: (error: any) => this.uploadingFailed(error),
         });
 
         /**
@@ -302,17 +313,11 @@ export default class ImageTool {
             }
             case 'file': {
                 const file = event.detail.file;
-
                 this.uploadFile(file);
                 break;
             }
         }
     }
-
-    /**
-     * Private methods
-     * ̿̿ ̿̿ ̿̿ ̿'̿'\̵͇̿̿\з= ( ▀ ͜͞ʖ▀) =ε/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿
-     */
 
     /**
      * Stores all Tool's data

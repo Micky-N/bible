@@ -1,9 +1,9 @@
-type LinkToolData = {
+export type LinkToolData = {
     link: string;
     meta: MetaData;
 };
 
-type MetaData = {
+export type MetaData = {
     image: {
         url?: string;
     };

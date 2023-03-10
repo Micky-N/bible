@@ -16,6 +16,8 @@ const props = defineProps<{
     note: Note & { id: string };
 }>();
 
+const emit = defineEmits(['deleteNote']);
+
 const router = useRouter();
 let apiNote = inject('ApiNote') as ApiNoteT;
 
@@ -24,6 +26,7 @@ const deleteNote = () => {
     if (!res) {
         console.error('error in delete note #' + props.note.id);
     }
+    emit('deleteNote', props.note.id);
 };
 
 const showNote = () => {

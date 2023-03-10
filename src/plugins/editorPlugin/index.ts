@@ -2,7 +2,6 @@ import type { App } from 'vue';
 import Editor from './Editor.vue';
 import Header from '@editorjs/header';
 import Image from './plugins/ImageTool';
-import SimpleImage from '@editorjs/simple-image';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Quote from '@editorjs/quote';
@@ -15,12 +14,10 @@ import Table from '@editorjs/table';
 import Link from '../../plugins/editorPlugin/plugins/LinkTool';
 import Color from 'editorjs-text-color-plugin';
 import Paragraph from 'editorjs-paragraph-with-alignment';
-import ToggleBlock from 'editorjs-toggle-block';
 import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
-import ApiNote from '../../note/ApiNote';
 import './style.css';
 
 const editorPlugin = (app: App) => {
@@ -45,22 +42,7 @@ const editorPlugin = (app: App) => {
              */
             image: {
                 class: Image,
-                config: {
-                    uploader: {
-                        // uploadByUrl: function (url) {
-                        //     console.log(url);
-                        // },²
-                        uploadByFile: function (file: File) {
-                            const base64 = ApiNote.getImageFromLocal(file.path);
-                            return {
-                                success: 1,
-                                file: {
-                                    url: `data:${file.type};base64,${base64}`,
-                                },
-                            };
-                        },
-                    },
-                },
+                config: {},
             },
             list: {
                 class: List,
@@ -79,10 +61,6 @@ const editorPlugin = (app: App) => {
                     captionPlaceholder: "Quote's author",
                 },
                 shortcut: 'CMD+SHIFT+O',
-            },
-            toggle: {
-                class: ToggleBlock,
-                inlineToolbar: true,
             },
             warning: Warning,
             color: {
@@ -129,6 +107,9 @@ const editorPlugin = (app: App) => {
             paragraph: {
                 class: Paragraph,
                 inlineToolbar: true,
+                config: {
+                    placeholder: 'Content',
+                },
                 toolbox: {
                     icon: IconText,
                 },

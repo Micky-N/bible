@@ -1,38 +1,68 @@
 import ajax from '@codexteam/ajax';
 import isPromise from './utils/isPromise';
+import ApiNote from '../../../../note/ApiNote';
 
-/**
- * Module for file uploading. Handle 3 scenarios:
- *  1. Select file from device and upload
- *  2. Upload by pasting URL
- *  3. Upload by pasting file from Clipboard or by Drag'n'Drop
- */
+export type ImageToolData = {
+    caption: string;
+    withBorder: boolean;
+    withBackground: boolean;
+    stretched: boolean;
+    file: {
+        url: string;
+    };
+};
+
+export type ImageConfig = {
+    actions: never[];
+    endpoints: {
+        byFile: string;
+        byUrl: string;
+    };
+    field: string;
+    types: string;
+    captionPlaceholder: string;
+    additionalRequestData: object;
+    additionalRequestHeaders: object;
+    buttonContent: string;
+    uploader?: {
+        uploadByFile?: (arg: File) => Promise<UploadResponseFormat>;
+        uploadByUrl?: (arg: string) => Promise<UploadResponseFormat>;
+    };
+};
+
+export type UploadResponseFormat = {
+    success: number;
+    file: {
+        url: string;
+    };
+};
+
 export default class Uploader {
-    /**
-     * @param {object} params - uploader module params
-     * @param {ImageConfig} params.config - image tool config
-     * @param {Function} params.onUpload - one callback for all uploading (file, url, d-n-d, pasting)
-     * @param {Function} params.onError - callback for uploading errors
-     */
-    constructor({ config, onUpload, onError }) {
+    config: ImageConfig;
+    onUpload: Function;
+    onError: Function;
+
+    constructor({
+        config,
+        onUpload,
+        onError,
+    }: {
+        config: ImageConfig;
+        onUpload: Function;
+        onError: Function;
+    }) {
         this.config = config;
         this.onUpload = onUpload;
         this.onError = onError;
     }
 
-    /**
-     * Handle clicks on the upload file button
-     * Fires ajax.transport()
-     *
-     * @param {Function} onPreview - callback fired when preview is ready
-     */
-    uploadSelectedFile({ onPreview }) {
-        const preparePreview = function (file) {
+    uploadSelectedFile({ onPreview }: { onPreview: Function }) {
+        const preparePreview = function (file: File) {
             const reader = new FileReader();
 
             reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                onPreview(e.target.result);
+            reader.onload = (e: ProgressEvent<FileReader>) => {
+                onPreview(e.target?.result);
             };
         };
 
@@ -40,68 +70,40 @@ export default class Uploader {
          * Custom uploading
          * or default uploading
          */
-        let upload;
+        let upload = ajax
+            .selectFiles({ accept: this.config.types })
+            .then((files: File[]) => {
+                const file = files[0];
+                preparePreview(file);
 
-        // custom uploading
-        if (
-            this.config.uploader &&
-            typeof this.config.uploader.uploadByFile === 'function'
-        ) {
-            upload = ajax
-                .selectFiles({ accept: this.config.types })
-                .then((files) => {
-                    preparePreview(files[0]);
-
-                    const customUpload = this.config.uploader.uploadByFile(
-                        files[0]
-                    );
-
-                    if (!isPromise(customUpload)) {
-                        console.warn(
-                            'Custom uploader method uploadByFile should return a Promise'
-                        );
-                    }
-
-                    return customUpload;
+                const customUpload = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        const base64 = ApiNote.getImageFromLocal(file.path);
+                        resolve({
+                            success: 1,
+                            file: {
+                                url: `data:${file.type};base64,${base64}`,
+                            },
+                        });
+                        reject({ success: 0, text: 'file not correct' });
+                    }, 1000);
                 });
 
-            // default uploading
-        } else {
-            upload = ajax
-                .transport({
-                    url: this.config.endpoints.byFile,
-                    data: this.config.additionalRequestData,
-                    accept: this.config.types,
-                    headers: this.config.additionalRequestHeaders,
-                    beforeSend: (files) => {
-                        preparePreview(files[0]);
-                    },
-                    fieldName: this.config.field,
-                })
-                .then((response) => response.body);
-        }
+                return customUpload;
+            });
 
         upload
-            .then((response) => {
+            .then((response: UploadResponseFormat) => {
                 this.onUpload(response);
             })
-            .catch((error) => {
+            .catch((error: { success: number; text: string }) => {
                 this.onError(error);
             });
     }
 
-    /**
-     * Handle clicks on the upload file button
-     * Fires ajax.post()
-     *
-     * @param {string} url - image source url
-     */
-    uploadByUrl(url) {
+    uploadByUrl(url: string) {
         let upload;
 
-        /**
-         * Custom uploading
-         */
         if (
             this.config.uploader &&
             typeof this.config.uploader.uploadByUrl === 'function'
@@ -129,26 +131,19 @@ export default class Uploader {
                     type: ajax.contentType.JSON,
                     headers: this.config.additionalRequestHeaders,
                 })
-                .then((response) => response.body);
+                .then((response: { [key: string]: any }) => response.body);
         }
 
         upload
-            .then((response) => {
+            .then((response: UploadResponseFormat) => {
                 this.onUpload(response);
             })
-            .catch((error) => {
+            .catch((error: object) => {
                 this.onError(error);
             });
     }
 
-    /**
-     * Handle clicks on the upload file button
-     * Fires ajax.post()
-     *
-     * @param {File} file - file pasted by drag-n-drop
-     * @param {Function} onPreview - file pasted by drag-n-drop
-     */
-    uploadByFile(file, { onPreview }) {
+    uploadByFile(file: File, { onPreview }: { onPreview: Function }) {
         /**
          * Load file for preview
          *
@@ -157,54 +152,22 @@ export default class Uploader {
         const reader = new FileReader();
 
         reader.readAsDataURL(file);
-        reader.onload = (e) => {
-            onPreview(e.target.result);
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+            onPreview(e.target?.result);
         };
 
-        let upload;
-
-        /**
-         * Custom uploading
-         */
-        if (
-            this.config.uploader &&
-            typeof this.config.uploader.uploadByFile === 'function'
-        ) {
-            upload = this.config.uploader.uploadByFile(file);
-
-            if (!isPromise(upload)) {
-                console.warn(
-                    'Custom uploader method uploadByFile should return a Promise'
-                );
-            }
-        } else {
-            /**
-             * Default uploading
-             */
-            const formData = new FormData();
-
-            formData.append(this.config.field, file);
-
-            if (
-                this.config.additionalRequestData &&
-                Object.keys(this.config.additionalRequestData).length
-            ) {
-                Object.entries(this.config.additionalRequestData).forEach(
-                    ([name, value]) => {
-                        formData.append(name, value);
-                    }
-                );
-            }
-
-            upload = ajax
-                .post({
-                    url: this.config.endpoints.byFile,
-                    data: formData,
-                    type: ajax.contentType.JSON,
-                    headers: this.config.additionalRequestHeaders,
-                })
-                .then((response) => response.body);
-        }
+        const upload = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const base64 = ApiNote.getImageFromLocal(file.path);
+                resolve({
+                    success: 1,
+                    file: {
+                        url: `data:${file.type};base64,${base64}`,
+                    },
+                });
+                reject({ success: 0, text: 'file not correct' });
+            }, 1000);
+        });
 
         upload
             .then((response) => {

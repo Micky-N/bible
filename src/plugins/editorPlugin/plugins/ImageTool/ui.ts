@@ -1,5 +1,6 @@
 import { IconPicture } from '@codexteam/icons';
 import { make } from './utils/dom';
+import { ImageConfig } from './uploader';
 
 /**
  * Class for working with UI:
@@ -8,6 +9,18 @@ import { make } from './utils/dom';
  *  - apply tune view
  */
 export default class Ui {
+    api: object;
+    config: object;
+    onSelectFile: Function;
+    readOnly: boolean;
+    nodes: {
+        wrapper: any;
+        imageContainer: any;
+        fileButton: any;
+        imageEl: undefined;
+        imagePreloader: any;
+        caption: any;
+    };
     /**
      * @param {object} ui - image tool Ui module
      * @param {object} ui.api - Editor.js API
@@ -15,7 +28,17 @@ export default class Ui {
      * @param {Function} ui.onSelectFile - callback for clicks on Select file button
      * @param {boolean} ui.readOnly - read-only mode flag
      */
-    constructor({ api, config, onSelectFile, readOnly }) {
+    constructor({
+        api,
+        config,
+        onSelectFile,
+        readOnly,
+    }: {
+        api: object;
+        config: object;
+        onSelectFile: Function;
+        readOnly: boolean;
+    }) {
         this.api = api;
         this.config = config;
         this.onSelectFile = onSelectFile;
@@ -99,7 +122,7 @@ export default class Ui {
         } else {
             this.toggleStatus(Ui.status.UPLOADING);
         }
-        console.log(this.nodes.wrapper);
+
         return this.nodes.wrapper;
     }
 

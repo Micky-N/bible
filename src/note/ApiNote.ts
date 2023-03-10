@@ -12,16 +12,20 @@ export const getNote = (idNote: string): Note | false => {
     return ipcRenderer.sendSync('electronStoreGet', 'notes.' + idNote, CLASS);
 };
 
-export const saveNote = (note: Note): boolean => {
+export const saveNote = (note: Note): false | Note => {
     if (note.id == undefined) {
         note.id = crypto.randomUUID();
     }
-    return ipcRenderer.sendSync(
+    const res = ipcRenderer.sendSync(
         'electronStoreSet',
         'notes.' + note.id,
         JSON.parse(JSON.stringify(note)),
         CLASS
     );
+    if (res) {
+        return note;
+    }
+    return false;
 };
 
 export const deleteNote = (idNote: string): boolean => {
