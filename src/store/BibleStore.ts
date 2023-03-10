@@ -9,8 +9,7 @@ const eStoreStorage: Storage = {
         return ApiBible.setState(key, state);
     },
     getItem(key: string): string {
-        const data = ApiBible.getState(key);
-        return data ? JSON.stringify(data) : '';
+        return ApiBible.getState(key) || '';
     },
     clear(): void {
         throw new Error('Function not implemented.');
@@ -24,33 +23,15 @@ const eStoreStorage: Storage = {
 };
 
 export const useBibleStore = defineStore('bibleStore', {
-    state: () =>
-        ({
-            language: 'fr',
-            version: 'YifIs3pOjkCNRDJgFahinQ',
-            testament: 0,
-            book: 0,
-            chapter: 0,
-            verses: '*',
-            lastSearchTime: undefined,
-        } as BibleStoreT),
-    persist: {
-        enabled: true,
-        strategies: [
-            {
-                storage: eStoreStorage,
-                paths: [
-                    'language',
-                    'version',
-                    'testament',
-                    'book',
-                    'chapter',
-                    'verses',
-                    'lastSearchTime',
-                ],
-            },
-        ],
-    },
+    state: (): BibleStoreT => ({
+        language: 'fr',
+        version: 'YifIs3pOjkCNRDJgFahinQ',
+        testament: 0,
+        book: 0,
+        chapter: 0,
+        verses: '*',
+        lastSearchTime: undefined,
+    }),
     actions: {
         setLanguage(language: string) {
             this.language = language;
@@ -83,5 +64,22 @@ export const useBibleStore = defineStore('bibleStore', {
         resetLastSearchTime() {
             this.lastSearchTime = undefined;
         },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                storage: eStoreStorage,
+                paths: [
+                    'language',
+                    'version',
+                    'testament',
+                    'book',
+                    'chapter',
+                    'verses',
+                    'lastSearchTime',
+                ],
+            },
+        ],
     },
 });

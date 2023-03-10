@@ -3,6 +3,10 @@
     <router-view />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useBibleStore } from '../../store/BibleStore';
+
+useBibleStore();
+</script>
 
 <style></style>

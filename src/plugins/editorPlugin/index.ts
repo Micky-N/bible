@@ -16,6 +16,7 @@ import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
+import BVerseTool from './plugins/BibleTool/index';
 import './style.css';
 
 export type QuoteToolData = {
@@ -36,23 +37,13 @@ export type TableToolData = {
 const editorPlugin = (app: App) => {
     app.component('Editor', Editor);
     app.provide('defaultConfig', {
-        /**
-         * Id of Element that should contain Editor instance
-         */
         holder: 'editorjs',
         autofocus: true,
         tools: {
-            /**
-             * Each Tool is a Plugin. Pass them via 'class' option with necessary settings {@link docs/tools.md}
-             */
             header: {
                 class: Header,
                 shortcut: 'CMD+SHIFT+H',
             },
-            // simpleImage: SimpleImage,
-            /**
-             * Or pass class directly without any configuration
-             */
             image: {
                 class: Image,
                 config: {},
@@ -75,6 +66,7 @@ const editorPlugin = (app: App) => {
                 },
                 shortcut: 'CMD+SHIFT+O',
             },
+            bible: BVerseTool,
             color: {
                 class: Color,
                 config: {

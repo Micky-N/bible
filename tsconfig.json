@@ -12,7 +12,8 @@
         "lib": ["ESNext", "DOM"],
         "skipLibCheck": true,
         "noEmit": true,
-        "declaration": true
+        "declaration": true,
+        "types": ["pinia-plugin-persist"]
     },
     "include": ["src/*"],
     "references": [{ "path": "./tsconfig.node.json" }]
