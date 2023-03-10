@@ -14,8 +14,7 @@
 import EditorJS, { EditorConfig, OutputData } from '@editorjs/editorjs';
 import { computed, inject, ref, watch } from 'vue';
 import DragDrop from 'editorjs-drag-drop';
-import LinkTool, { LinkToolData } from './plugins/LinkTool';
-import { Blocks } from '@editorjs/editorjs/types/api';
+import editorExport from './editorExport';
 
 const emit = defineEmits(['save', 'export-html']);
 
@@ -57,23 +56,7 @@ const exportHTML = () => {
     if (!props.data) {
         return false;
     }
-    const edjsParser = require('editorjs-parser');
-    const test = {
-        paragraph: function (
-            data: { [key: string]: string },
-            config: { [key: string]: { [key: string]: string } }
-        ) {
-            return `<p class='${config.paragraph.pClass} ${data.alignment}'>${data.text}</p>`;
-        },
-        separator: function () {
-            return "<div class='separator'></div>";
-        },
-        link: function (data: LinkToolData) {
-            return `<a class="link-tool__content link-tool__content--rendered" target="_blank" rel="nofollow noindex noreferrer" href="${data.link}"><div class="link-tool__image" style="background-image: url(${data.meta.image.url});"></div><div class="link-tool__title">${data.meta.title}</div><p class="link-tool__description">${data.meta.description}</p><span class="link-tool__anchor">${data.meta.site_name}</span></a>`;
-        },
-    };
-    const parser = new edjsParser(undefined, test);
-    emit('export-html', parser.parse(props.data));
+    emit('export-html', editorExport.parse(props.data));
 };
 watch(
     () => props.config?.readOnly,

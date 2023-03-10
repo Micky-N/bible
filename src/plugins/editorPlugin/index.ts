@@ -5,8 +5,6 @@ import Image from './plugins/ImageTool';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Quote from '@editorjs/quote';
-import Warning from '@editorjs/warning';
-import Code from '@editorjs/code';
 import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
 import Embed from '@editorjs/embed';
@@ -19,6 +17,21 @@ import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
 import './style.css';
+
+export type QuoteToolData = {
+    text: string;
+    caption: string;
+    alignment: string;
+};
+
+export type ChecklistToolData = {
+    items: Array<{ text: string; checked: boolean }>;
+};
+
+export type TableToolData = {
+    withHeadings: boolean;
+    content: string[][];
+};
 
 const editorPlugin = (app: App) => {
     app.component('Editor', Editor);
@@ -62,7 +75,6 @@ const editorPlugin = (app: App) => {
                 },
                 shortcut: 'CMD+SHIFT+O',
             },
-            warning: Warning,
             color: {
                 class: Color,
                 config: {
@@ -113,10 +125,6 @@ const editorPlugin = (app: App) => {
                 toolbox: {
                     icon: IconText,
                 },
-            },
-            code: {
-                class: Code,
-                shortcut: 'CMD+SHIFT+C',
             },
             delimiter: Delimiter,
             inlineCode: {

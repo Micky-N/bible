@@ -9,7 +9,7 @@ export default class Separator {
 
     render(): HTMLDivElement {
         let div = document.createElement('div');
-        div.classList.add('separator');
+        div.classList.add('ce-separator');
         return div;
     }
 

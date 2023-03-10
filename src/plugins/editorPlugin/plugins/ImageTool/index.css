@@ -44,6 +44,10 @@
     box-sizing: border-box;
 }
 
+.image-tool__caption {
+    text-align: center;
+}
+
 .image-tool__caption[contentEditable='true'][data-placeholder]::before {
     position: absolute !important;
     content: attr(data-placeholder);

@@ -1,9 +1,11 @@
-.paragraph.right {
-    text-align: right;
-}
-
-.separator {
+.ce-separator {
     height: 1px;
     margin: 30px auto;
     background: #c5c5c5;
+}
+
+blockquote.ce-blockquote {
+    margin: 20px 0 30px;
+    padding-left: 20px;
+    border-left: 3px solid #1371b8;
 }
