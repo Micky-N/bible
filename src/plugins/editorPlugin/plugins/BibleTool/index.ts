@@ -1,4 +1,6 @@
 import { BlockToolData, OutputBlockData } from '@editorjs/editorjs';
+import ApiBible from '../../../../bible/ApiBible';
+import { BibleStoreT } from '../../../../types/Bible';
 
 export default class BVerseTool {
     data: object;
@@ -21,6 +23,21 @@ export default class BVerseTool {
         wrapper.appendChild(input);
 
         input.placeholder = 'Set verses...';
+        input.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const state = ApiBible.getState('bibleStore');
+                const target = event.target as HTMLInputElement | null;
+                if (state && target) {
+                    const stateJson = JSON.parse(state) as BibleStoreT;
+                    const verses = ApiBible.search(stateJson, target.value);
+                    console.log(
+                        ApiBible.getVerses({ ...stateJson, ...verses })
+                    );
+                }
+            }
+        });
+
         // @TODO: Mettre une condition pour cache l'input
 
         return wrapper;
