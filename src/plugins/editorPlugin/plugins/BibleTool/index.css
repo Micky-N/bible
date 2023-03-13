@@ -1,0 +1,53 @@
+reference {
+    border: solid 1px #4e5776;
+    border-radius: 5px;
+    position: relative;
+    padding: 0 5px;
+}
+
+reference .tooltip {
+    width: 250px;
+    top: 35px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 10px 20px;
+    color: #444444;
+    background-color: #eeeeee;
+    font-weight: normal;
+    font-size: 13px;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 99999999;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+reference sup {
+    font-size: 10px;
+    line-height: 0;
+}
+
+reference:hover .tooltip {
+    display: block;
+}
+
+reference .tooltip i {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -12px;
+    width: 24px;
+    height: 12px;
+    overflow: hidden;
+}
+
+reference .tooltip i::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(45deg);
+    background-color: #eeeeee;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}

@@ -164,7 +164,7 @@ const verses = computed((): VerseT[] => {
     return [];
 });
 
-const autoCompleteCallback = (value: string): AutoCompleteT[] => {
+const autoCompleteCallback = (value: string): string[] => {
     return api.autoCompleteBooks(bibleStore.$state, value);
 };
 

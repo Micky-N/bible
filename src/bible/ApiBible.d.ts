@@ -40,7 +40,7 @@ export declare function getVersion(state: BibleStoreT): VersionT;
 export declare function autoCompleteBooks(
     state: BibleStoreT,
     searchValue: string
-): AutoCompleteT[];
+): string[];
 
 export declare function search(
     state: BibleStoreT,

@@ -16,7 +16,8 @@ import Tooltip from 'editorjs-tooltip';
 import Underline from '@editorjs/underline';
 import Separator from './plugins/Separator';
 import { IconText } from '@codexteam/icons';
-import BVerseTool from './plugins/BibleTool/index';
+import BibleTool from './plugins/BibleTool/index';
+import BibleToolInline from './plugins/BibleTool/inline';
 import './style.css';
 
 export type QuoteToolData = {
@@ -66,7 +67,7 @@ const editorPlugin = (app: App) => {
                 },
                 shortcut: 'CMD+SHIFT+O',
             },
-            bible: BVerseTool,
+            bible: BibleTool,
             color: {
                 class: Color,
                 config: {
@@ -119,9 +120,9 @@ const editorPlugin = (app: App) => {
                 },
             },
             delimiter: Delimiter,
-            inlineCode: {
-                class: InlineCode,
-                shortcut: 'CMD+SHIFT+C',
+            inlineBible: {
+                class: BibleToolInline,
+                shortcut: 'CMD+P',
             },
             link: Link,
             embed: Embed,

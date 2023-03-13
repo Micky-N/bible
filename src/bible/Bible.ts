@@ -150,6 +150,9 @@ export default class Bible {
         const bookNormalize = bookName
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
+        searchValue = searchValue
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
         const regexSearch = new RegExp(`^${searchValue}`, 'i');
         if (regexSearch.test(bookNormalize)) {
             return true;

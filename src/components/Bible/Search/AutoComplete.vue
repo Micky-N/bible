@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div :class="divClass">
         <input
+            :class="inputClass"
             ref="searchInput"
             type="text"
             :placeholder="placeholder"
@@ -8,17 +9,20 @@
             @input="updateVal($event)"
             @keydown.tab="selectFirstAutoValue"
         />
-        <div v-if="autoCompletes.length">
-            <ul style="list-style: none">
-                <li
-                    @click="selectAutoCompleteValue(autoComplete)"
-                    v-for="(autoComplete, index) in autoCompletes"
-                    :key="index"
-                >
-                    {{ autoComplete }}
-                </li>
-            </ul>
-        </div>
+        <ul
+            :class="ulClass"
+            v-if="autoCompletes.length"
+            style="list-style: none"
+        >
+            <li
+                :class="liClass"
+                @click="selectAutoCompleteValue(autoComplete)"
+                v-for="(autoComplete, index) in autoCompletes"
+                :key="index"
+            >
+                {{ autoComplete }}
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -27,10 +31,23 @@ import { ref, watch } from 'vue';
 
 const searchInput = ref<HTMLInputElement | null>(null);
 
-const props = defineProps<{
-    autoCompleteCallback: Function;
-    modelValue: string;
-}>();
+const props = withDefaults(
+    defineProps<{
+        autoCompleteCallback: Function;
+        modelValue: string;
+        divClass: string;
+        inputClass: string;
+        ulClass: string;
+        liClass: string;
+    }>(),
+    {
+        divClass: '',
+        inputClass: '',
+        ulClass: '',
+        liClass: '',
+    }
+);
+
 const emit = defineEmits(['update:modelValue']);
 const updateVal = ($event: Event) => {
     if ($event.target) {

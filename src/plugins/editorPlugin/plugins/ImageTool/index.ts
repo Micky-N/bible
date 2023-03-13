@@ -26,16 +26,12 @@ export default class ImageTool {
                   uploadByFile?:
                       | ((
                             arg: File
-                        ) => Promise<
-                            import('c:/node/electronJs/bible/src/plugins/editorPlugin/plugins/ImageTool/uploader').UploadResponseFormat
-                        >)
+                        ) => Promise<import('./uploader').UploadResponseFormat>)
                       | undefined;
                   uploadByUrl?:
                       | ((
                             arg: string
-                        ) => Promise<
-                            import('c:/node/electronJs/bible/src/plugins/editorPlugin/plugins/ImageTool/uploader').UploadResponseFormat
-                        >)
+                        ) => Promise<import('./uploader').UploadResponseFormat>)
                       | undefined;
                   /**
                    * Available image tools

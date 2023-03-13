@@ -1,9 +1,16 @@
 import { BlockToolData, OutputBlockData } from '@editorjs/editorjs';
 import ApiBible from '../../../../bible/ApiBible';
-import { BibleStoreT } from '../../../../types/Bible';
+import { BibleStoreT, SearchBibleT, VerseT } from '../../../../types/Bible';
 
-export default class BVerseTool {
-    data: object;
+type BibleToolData = {
+    reference: SearchBibleT | false;
+    verses: VerseT[];
+};
+
+export default class BibleTool {
+    data: BibleToolData;
+    wrapper: HTMLElement;
+    readOnly: boolean;
     static get toolbox() {
         return {
             title: 'Bible Verses',
@@ -11,51 +18,160 @@ export default class BVerseTool {
         };
     }
 
-    constructor({ data }: { data: object }) {
-        this.data = data;
+    static get isReadOnlySupported(): boolean {
+        return true;
     }
 
-    render() {
-        const wrapper = document.createElement('div');
+    constructor({
+        data,
+        readOnly,
+    }: {
+        data: BibleToolData;
+        readOnly: boolean;
+    }) {
+        this.readOnly = readOnly;
+        this.data = {
+            verses: data.verses || [],
+            reference: data.reference || false,
+        };
+
+        this.wrapper = document.createElement('div');
         const input = document.createElement('input');
 
-        wrapper.classList.add('simple-image');
-        wrapper.appendChild(input);
+        this.wrapper.appendChild(input);
 
         input.placeholder = 'Set verses...';
-        input.addEventListener('keypress', function (event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const state = ApiBible.getState('bibleStore');
-                const target = event.target as HTMLInputElement | null;
-                if (state && target) {
-                    const stateJson = JSON.parse(state) as BibleStoreT;
-                    const verses = ApiBible.search(stateJson, target.value);
-                    console.log(
-                        ApiBible.getVerses({ ...stateJson, ...verses })
+
+        input.addEventListener('input', (event: Event) => {
+            this.removeList();
+            const target = event.target as HTMLInputElement | null;
+            const state = ApiBible.getState('bibleStore');
+            if (target && state) {
+                const stateJson = JSON.parse(state) as BibleStoreT;
+                if (target.value.length >= 3) {
+                    const books = ApiBible.autoCompleteBooks(
+                        stateJson,
+                        target.value
                     );
+                    if (books.length) {
+                        const ul = document.createElement('ul');
+                        books.forEach((book) => {
+                            const li = document.createElement('li');
+                            li.innerHTML = book;
+                            ul.appendChild(li);
+                            li.addEventListener('click', (event: Event) => {
+                                const currentLi =
+                                    event.target as HTMLInputElement | null;
+                                if (currentLi) {
+                                    target.value = currentLi.innerText;
+                                    ul.remove();
+                                    target.focus();
+                                }
+                            });
+                        });
+                        that.wrapper.appendChild(ul);
+                    }
                 }
             }
         });
-
-        // @TODO: Mettre une condition pour cache l'input
-
-        return wrapper;
+        const that = this;
+        input.addEventListener('keypress', function (event) {
+            const target = event.target as HTMLInputElement | null;
+            const state = ApiBible.getState('bibleStore');
+            if (target && state) {
+                const stateJson = JSON.parse(state) as BibleStoreT;
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    that.data.reference = ApiBible.search(
+                        stateJson,
+                        target.value
+                    );
+                    that.data.verses = ApiBible.getVerses({
+                        ...stateJson,
+                        ...that.data.reference,
+                    });
+                    that.showVerses();
+                }
+            }
+        });
     }
 
-    save(blockContent) {
-        const input = blockContent.querySelector('input');
-
-        return {
-            url: input.value,
-        };
+    render() {
+        return this.showVerses();
     }
 
-    validate(savedData) {
-        if (!savedData.url.trim()) {
+    save() {
+        return this.data;
+    }
+
+    validate(savedData: BibleToolData) {
+        if (!savedData.reference || !savedData.verses.length) {
             return false;
         }
 
         return true;
+    }
+
+    showVerses() {
+        if (this.data.verses.length) {
+            this.setTitle();
+            const p = document.createElement('p');
+            this.data.verses.forEach((verse) => {
+                const span = document.createElement('span');
+                const sup = document.createElement('sup');
+                sup.innerText = (verse.id + 1).toString();
+                sup.dataset.idVerse = verse.id;
+                span.appendChild(sup);
+                span.innerHTML += verse.value + ' ';
+                p.appendChild(span);
+            });
+            this.wrapper.appendChild(p);
+            document.querySelectorAll('[data-id-verse]').forEach((verseSup) => {
+                verseSup.addEventListener('click', (event: Event) => {
+                    const target = event.target as HTMLElement | null;
+                    if (target) {
+                        console.log(target.dataset.idVerse);
+                    }
+                });
+            });
+            this.removeInput();
+        }
+        return this.wrapper;
+    }
+
+    removeInput() {
+        for (const [k, item] of Object.entries(this.wrapper.children)) {
+            if (['INPUT', 'UL'].includes(item.nodeName)) {
+                item.remove();
+            }
+        }
+    }
+
+    removeList() {
+        for (const [k, item] of Object.entries(this.wrapper.children)) {
+            if (item.nodeName == 'UL') {
+                item.remove();
+            }
+        }
+    }
+
+    setTitle() {
+        const a = document.createElement('span');
+        const state = ApiBible.getState('bibleStore');
+        if (state) {
+            const stateJson = JSON.parse(state) as BibleStoreT;
+            const book = ApiBible.getBook({
+                ...stateJson,
+                ...this.data.reference,
+            });
+            const { chapter, verses } = this.data.reference as SearchBibleT;
+            const versesText = verses
+                .toString()
+                .split('-')
+                .map((v) => parseInt(v) + 1)
+                .join('-');
+            a.innerText = `${book.value} ${chapter + 1}: ${versesText}`;
+            this.wrapper.appendChild(a);
+        }
     }
 }

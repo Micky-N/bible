@@ -70,7 +70,10 @@ export const getVersion = (state: BibleStoreT): VersionT => {
     return ipcRenderer.sendSync('version', getInstance(state));
 };
 
-export const autoCompleteBooks = (state: BibleStoreT, searchValue: string) => {
+export const autoCompleteBooks = (
+    state: BibleStoreT,
+    searchValue: string
+): string[] => {
     return ipcRenderer.sendSync(
         'autoCompleteBooks',
         getInstance(state),
